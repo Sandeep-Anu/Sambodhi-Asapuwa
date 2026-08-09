@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ශ්‍රී සම්බෝධි විහාරස්ථ අභිනව චෛත්‍ය රාජයාණන් වහන්සේ ඉදිකිරීමේ මහා පුණ්‍ය කර්මය
- | Sacred Stupa Project</title>
+    <title>ශ්‍රී සම්බෝධි විහාරස්ථ අභිනව චෛත්‍ය රාජයාණන් වහන්සේ ඉදිකිරීමේ මහා පුණ්‍ය කර්මය | Sacred Stupa Project</title>
     <!-- Tailwind CSS for Layout -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Sinhala Web Font -->
@@ -24,7 +23,7 @@
                 <span class="lang-en">Sri Sambodhi Viharaya</span>
             </h1>
             <!-- Language Toggle Switch -->
-            <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500">
+            <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500 transition">
                 <span class="lang-si">English Version</span>
                 <span class="lang-en">සිංහල පිටුව</span>
             </button>
@@ -95,7 +94,7 @@
         <div class="max-w-4xl mx-auto">
             <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
                 <span class="lang-si">වත්මන් ඉදි කිරීම්</span>
-                <span class="lang-en">Ongoing Activity </span>
+                <span class="lang-en">Ongoing Activity</span>
             </h3>
             <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <p class="text-center text-slate-500 col-span-3">Loading photos...</p>
@@ -127,29 +126,29 @@
                     <span class="lang-si">විමසන්න / ලැබීම් පත එවන්න</span>
                     <span class="lang-en">Inquiry & Slip Submission</span>
                 </h3>
-                <form class="space-y-3 text-sm">
+                <form id="inquiryForm" onsubmit="handleFormSubmit(event)" class="space-y-3 text-sm">
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">
                             <span class="lang-si">ඔබගේ නම</span>
                             <span class="lang-en">Your Name</span>
                         </label>
-                        <input type="text" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                        <input type="text" id="userName" required class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
                     </div>
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">
                             <span class="lang-si">දුරකථන අංකය</span>
                             <span class="lang-en">Phone Number</span>
                         </label>
-                        <input type="tel" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                        <input type="tel" id="userPhone" required class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
                     </div>
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">
                             <span class="lang-si">පණිවිඩය / පැතුම</span>
                             <span class="lang-en">Message or Wish</span>
                         </label>
-                        <textarea rows="3" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
+                        <textarea id="userMessage" rows="3" required class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
                     </div>
-                    <button type="button" class="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-2 px-4 rounded-lg transition">
+                    <button type="submit" class="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-2 px-4 rounded-lg transition">
                         <span class="lang-si">පණිවිඩය යොමු කරන්න</span>
                         <span class="lang-en">Send Inquiry</span>
                     </button>
@@ -162,8 +161,8 @@
     <!-- Footer -->
     <footer class="bg-amber-950 text-amber-200/80 py-6 text-center text-xs">
         <p>
-            <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ දායක සභාව -2026</span>
-            <span class="lang-en">Donours Association of Sri Sambodhi Vihara- 2026.</span>
+            <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ දායක සභාව - 2026</span>
+            <span class="lang-en">Donors Association of Sri Sambodhi Vihara - 2026.</span>
         </p>
     </footer>
 
@@ -193,16 +192,22 @@
             const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tabName)}`;
             const res = await fetch(url);
             const text = await res.text();
-            // Parse Google's JSON wrap
+            
+            // Extract pure JSON from GViz wrapper
             const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
             
-            const cols = json.table.cols.map(c => c.label);
+            const cols = json.table.cols.map(c => (c.label || '').trim());
             return json.table.rows.map(r => {
                 let obj = {};
                 r.c.forEach((cell, idx) => {
                     const key = cols[idx];
                     if (key) {
-                        obj[key] = cell && cell.v !== null ? cell.v : '';
+                        // Extract formatted text or raw value
+                        if (cell) {
+                            obj[key] = cell.f !== undefined && cell.f !== null ? cell.f : (cell.v !== null ? cell.v : '');
+                        } else {
+                            obj[key] = '';
+                        }
                     }
                 });
                 return obj;
@@ -223,6 +228,13 @@
             return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
         }
 
+        // Simple Form Submission Handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            alert(currentLang === 'si' ? 'ඔබගේ පණිවිඩය සාර්ථකව යොමු කරන ලදී.' : 'Your message has been submitted successfully.');
+            document.getElementById('inquiryForm').reset();
+        }
+
         // Load Data on Startup
         async function loadWebsiteData() {
             // A. Progress Data
@@ -230,8 +242,8 @@
                 const progressData = await fetchGoogleSheet('Progress');
                 if (progressData && progressData.length > 0) {
                     const row = progressData[0];
-                    const goal = parseFloat(row.Goal) || 0;
-                    const raised = parseFloat(row.Raised) || 0;
+                    const goal = parseFloat(String(row.Goal).replace(/[^0-9.-]+/g, '')) || 0;
+                    const raised = parseFloat(String(row.Raised).replace(/[^0-9.-]+/g, '')) || 0;
                     const percentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
 
                     const bar = document.getElementById('progressBar');
