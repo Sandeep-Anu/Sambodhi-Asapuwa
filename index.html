@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ශ්‍රී සම්බෝධි විහාරස්ථ අභිනව චෛත්‍ය රාජයාණන් වහන්සේ ඉදිකිරීමේ මහා පුණ්‍ය කර්මය | Sacred Stupa Project</title>
+    <title>ශ්‍රී සම්බෝධි විහාරස්ථ අභිනව චෛත්‍ය රාජයාණන් වහන්සේ ඉදිකිරීමේ මහා පුණ්‍ය කර්මය! | Sacred Stupa Project</title>
     <!-- Tailwind CSS for Layout -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Sinhala Web Font -->
@@ -51,7 +51,7 @@
                 <span class="lang-si">අරමුදල් ප්‍රගතිය</span>
                 <span class="lang-en">Fundraising Progress</span>
             </h3>
-            
+
             <!-- Dynamic Progress Bar -->
             <div class="w-full bg-slate-200 rounded-full h-6 mb-4 overflow-hidden">
                 <div id="progressBar" class="bg-amber-500 h-6 rounded-full text-xs font-bold text-amber-950 text-center leading-6 transition-all duration-500" style="width: 0%;">
@@ -75,6 +75,7 @@
                     <span id="goalText" class="text-slate-800">LKR 0</span>
                 </div>
             </div>
+            <p id="progressError" class="text-center text-red-500 text-xs mt-3 hidden"></p>
         </div>
     </section>
 
@@ -105,7 +106,7 @@
     <!-- Bank Details & Inquiry Form -->
     <section class="max-w-4xl mx-auto py-12 px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
+
             <!-- Official Bank Account Details -->
             <div class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md">
                 <h3 class="text-xl font-bold text-amber-200 mb-4">
@@ -187,22 +188,56 @@
             }
         }
 
+        // ---- Helpers for forgiving column-name matching ----
+        // Sheets rarely have header text that matches code exactly ("Image_URL" vs
+        // "Image URL" vs "Photo Link" etc). These helpers strip case/spaces/punctuation
+        // so small header differences don't silently drop every row.
+        function normalizeKey(k) {
+            return String(k || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+
+        function pickField(row, candidates) {
+            const normalizedMap = {};
+            Object.keys(row).forEach(k => {
+                normalizedMap[normalizeKey(k)] = row[k];
+            });
+            for (const c of candidates) {
+                const nk = normalizeKey(c);
+                if (normalizedMap[nk] !== undefined && String(normalizedMap[nk]).trim() !== '') {
+                    return normalizedMap[nk];
+                }
+            }
+            return '';
+        }
+
         // Helper to fetch directly from Google's Native GViz API
         async function fetchGoogleSheet(tabName) {
             const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tabName)}`;
             const res = await fetch(url);
             const text = await res.text();
-            
+
             // Extract pure JSON from GViz wrapper
-            const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
-            
+            const jsonStart = text.indexOf('{');
+            const jsonEnd = text.lastIndexOf('}');
+            if (jsonStart === -1 || jsonEnd === -1) {
+                throw new Error(`Sheet tab "${tabName}" returned an unexpected response. Check the tab name and sharing settings.`);
+            }
+            const json = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
+
+            if (json.status === 'error') {
+                const reason = (json.errors && json.errors[0] && json.errors[0].detailed_message) || 'Unknown error';
+                throw new Error(`Sheet tab "${tabName}" error: ${reason}`);
+            }
+            if (!json.table) {
+                throw new Error(`Sheet tab "${tabName}" has no table data. Check the tab name is exactly right (case-sensitive).`);
+            }
+
             const cols = json.table.cols.map(c => (c.label || '').trim());
-            return json.table.rows.map(r => {
+            return (json.table.rows || []).map(r => {
                 let obj = {};
-                r.c.forEach((cell, idx) => {
+                (r && r.c ? r.c : []).forEach((cell, idx) => {
                     const key = cols[idx];
                     if (key) {
-                        // Extract formatted text or raw value
                         if (cell) {
                             obj[key] = cell.f !== undefined && cell.f !== null ? cell.f : (cell.v !== null ? cell.v : '');
                         } else {
@@ -214,16 +249,19 @@
             });
         }
 
-        // Helper to convert YouTube URLs
+        // Helper to convert YouTube URLs (including Shorts) to embeddable form
         function getYouTubeEmbedUrl(url) {
             if (!url) return '';
+            url = String(url).trim();
             let videoId = '';
-            if (url.includes('v=')) {
+            if (url.includes('embed/')) {
+                return url;
+            } else if (url.includes('shorts/')) {
+                videoId = url.split('shorts/')[1].split('?')[0].split('&')[0];
+            } else if (url.includes('v=')) {
                 videoId = url.split('v=')[1].split('&')[0];
             } else if (url.includes('youtu.be/')) {
                 videoId = url.split('youtu.be/')[1].split('?')[0];
-            } else if (url.includes('embed/')) {
-                return url;
             }
             return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
         }
@@ -242,19 +280,28 @@
                 const progressData = await fetchGoogleSheet('Progress');
                 if (progressData && progressData.length > 0) {
                     const row = progressData[0];
-                    const goal = parseFloat(String(row.Goal).replace(/[^0-9.-]+/g, '')) || 0;
-                    const raised = parseFloat(String(row.Raised).replace(/[^0-9.-]+/g, '')) || 0;
+                    const goal = parseFloat(String(pickField(row, ['Goal', 'Target', 'Total Goal'])).replace(/[^0-9.-]+/g, '')) || 0;
+                    const raised = parseFloat(String(pickField(row, ['Raised', 'Collected', 'Raised So Far'])).replace(/[^0-9.-]+/g, '')) || 0;
                     const percentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
 
                     const bar = document.getElementById('progressBar');
                     bar.style.width = `${percentage}%`;
                     bar.textContent = `${percentage}%`;
 
-                    document.getElementById('raisedText').textContent = row.Raised_Formatted || `LKR ${raised.toLocaleString()}`;
-                    document.getElementById('goalText').textContent = row.Target_Formatted || `LKR ${goal.toLocaleString()}`;
+                    const raisedFormatted = pickField(row, ['Raised_Formatted', 'Raised Formatted']);
+                    const targetFormatted = pickField(row, ['Target_Formatted', 'Goal_Formatted', 'Target Formatted']);
+                    document.getElementById('raisedText').textContent = raisedFormatted || `LKR ${raised.toLocaleString()}`;
+                    document.getElementById('goalText').textContent = targetFormatted || `LKR ${goal.toLocaleString()}`;
+                } else {
+                    console.warn('Progress tab returned no rows.');
                 }
             } catch (err) {
                 console.error('Error loading progress:', err);
+                const errEl = document.getElementById('progressError');
+                errEl.textContent = currentLang === 'si'
+                    ? 'ප්‍රගති දත්ත පූරණය කිරීමේ දෝෂයක් - Console එක පරීක්ෂා කරන්න.'
+                    : `Couldn't load progress data (${err.message})`;
+                errEl.classList.remove('hidden');
             }
 
             // B. Video Data
@@ -265,23 +312,33 @@
                 if (!videoData || videoData.length === 0) {
                     container.innerHTML = '<p class="text-center text-slate-500 col-span-2">No videos added yet.</p>';
                 } else {
+                    let addedCount = 0;
                     videoData.forEach(item => {
-                        const embedUrl = getYouTubeEmbedUrl(item.URL);
+                        const rawUrl = pickField(item, ['URL', 'Link', 'YouTube', 'YouTube Link', 'Video URL', 'Video Link']);
+                        const title = pickField(item, ['Title', 'Name']);
+                        const embedUrl = getYouTubeEmbedUrl(rawUrl);
                         if (embedUrl) {
+                            addedCount++;
                             const card = document.createElement('div');
                             card.className = 'bg-white p-4 rounded-xl shadow-md border border-amber-100';
                             card.innerHTML = `
                                 <div class="aspect-video bg-slate-200 rounded-lg overflow-hidden mb-3">
                                     <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
                                 </div>
-                                <p class="font-semibold text-amber-900 text-sm">${item.Title || ''}</p>
+                                <p class="font-semibold text-amber-900 text-sm">${title || ''}</p>
                             `;
                             container.appendChild(card);
+                        } else {
+                            console.warn('Skipped a video row - no recognizable YouTube URL. Raw row from sheet:', item);
                         }
                     });
+                    if (addedCount === 0) {
+                        container.innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">${videoData.length} row(s) found in "Videos" tab, but none had a usable YouTube link. Open the browser console for details on each row's actual column names.</p>`;
+                    }
                 }
             } catch (err) {
                 console.error('Error loading videos:', err);
+                document.getElementById('videoContainer').innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">Couldn't load videos (${err.message})</p>`;
             }
 
             // C. Gallery Data
@@ -292,20 +349,30 @@
                 if (!galleryData || galleryData.length === 0) {
                     container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>';
                 } else {
+                    let addedCount = 0;
                     galleryData.forEach(item => {
-                        if (item.Image_URL) {
+                        const imageUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
+                        const caption = pickField(item, ['Caption', 'Description', 'Title']);
+                        if (imageUrl) {
+                            addedCount++;
                             const card = document.createElement('div');
                             card.className = 'bg-white rounded-xl shadow-md overflow-hidden border border-amber-100';
                             card.innerHTML = `
-                                <img src="${item.Image_URL}" alt="${item.Caption || 'Gallery Photo'}" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
-                                ${item.Caption ? `<p class="p-2 text-xs text-slate-600 text-center">${item.Caption}</p>` : ''}
+                                <img src="${imageUrl}" alt="${caption || 'Gallery Photo'}" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
+                                ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
                             `;
                             container.appendChild(card);
+                        } else {
+                            console.warn('Skipped a gallery row - no image URL found. Raw row from sheet:', item);
                         }
                     });
+                    if (addedCount === 0) {
+                        container.innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">${galleryData.length} row(s) found in "Gallery" tab, but none had a usable image link. Open the browser console for details on each row's actual column names.</p>`;
+                    }
                 }
             } catch (err) {
                 console.error('Error loading gallery:', err);
+                document.getElementById('galleryContainer').innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">Couldn't load photos (${err.message})</p>`;
             }
         }
 
