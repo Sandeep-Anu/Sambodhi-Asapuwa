@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>සූවිසි මහ සෑ රජයාණන් වහන්සේ නිර්මාණ පූජෝපහාරය | Sacred Stupa Project</title>
+    <!-- Tailwind CSS for Layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Sinhala Web Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans Sinhala', sans-serif; }
+        .lang-en { display: none; }
+    </style>
+</head>
+<body class="bg-amber-50 text-slate-800">
+
+    <!-- Navigation Header -->
+    <nav class="bg-amber-900 text-amber-100 p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="font-bold text-lg md:text-xl">
+                <span class="lang-si">ශ්‍රී ධර්මරාජ විහාරය</span>
+                <span class="lang-en">Sri Dharmaraja Temple</span>
+            </h1>
+            <!-- Language Toggle Switch -->
+            <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500">
+                <span class="lang-si">English Version</span>
+                <span class="lang-en">සිංහල පිටුව</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <header class="bg-gradient-to-b from-amber-900 to-amber-800 text-white py-12 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-4 text-amber-200">
+                <span class="lang-si">සූවිසි මහ සෑ රජයාණන් වහන්සේ නිර්මාණ පින්කම</span>
+                <span class="lang-en">Sacred Stupa Construction Project</span>
+            </h2>
+            <p class="text-base md:text-lg text-amber-100 mb-6 max-w-2xl mx-auto">
+                <span class="lang-si">අප අතිපූජනීය මහා සංඝරත්නයේ අනුශාසනා පරිදි ඉදිකෙරෙන මෙම පූජනීය මහ සෑ රජයාණන් වහන්සේ උදෙසා ඔබගේ උතුම් සම්මාදම එක් කරන්න.</span>
+                <span class="lang-en">Join hands with us to build a sacred stupa under the guidance of our venerable Mahasangha for future generations.</span>
+            </p>
+        </div>
+    </header>
+
+    <!-- Graphical Progress Tracker -->
+    <section class="max-w-4xl mx-auto -mt-6 px-4">
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-amber-200">
+            <h3 class="text-xl font-bold text-amber-900 mb-4 text-center">
+                <span class="lang-si">අරමුදල් ප්‍රගතිය</span>
+                <span class="lang-en">Fundraising Progress</span>
+            </h3>
+            
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-200 rounded-full h-6 mb-4 overflow-hidden">
+                <div class="bg-amber-500 h-6 rounded-full text-xs font-bold text-amber-950 text-center leading-6" style="width: 42%;">
+                    42%
+                </div>
+            </div>
+
+            <div class="flex justify-between text-sm md:text-base font-semibold text-slate-700">
+                <div>
+                    <span class="block text-slate-500 text-xs">
+                        <span class="lang-si">ලැබී ඇති මුදල</span>
+                        <span class="lang-en">Raised So Far</span>
+                    </span>
+                    <span class="text-amber-800 font-bold">LKR 6,300,000</span>
+                </div>
+                <div class="text-right">
+                    <span class="block text-slate-500 text-xs">
+                        <span class="lang-si">අපේක්ෂිත මුදල</span>
+                        <span class="lang-en">Total Goal</span>
+                    </span>
+                    <span class="text-slate-800">LKR 15,000,000</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dhamma Sayings & Video Section -->
+    <section class="max-w-4xl mx-auto py-12 px-4">
+        <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
+            <span class="lang-si">පූජනීය ස්වාමීන් වහන්සේලාගේ අනුශාසනා</span>
+            <span class="lang-en">Dhamma Advice & Blessings</span>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Video Container 1 -->
+            <div class="bg-white p-4 rounded-xl shadow-md border border-amber-100">
+                <div class="aspect-video bg-slate-200 rounded-lg flex items-center justify-center text-slate-500 mb-3">
+                    [YouTube Video Embed]
+                </div>
+                <p class="font-semibold text-amber-900 text-sm">
+                    <span class="lang-si">ස්තූප පූජාවේ ආනිශංස පිළිබඳ දේශනාව</span>
+                    <span class="lang-en">Blessings and Merit of Stupa Construction</span>
+                </p>
+            </div>
+            <!-- Video Container 2 -->
+            <div class="bg-white p-4 rounded-xl shadow-md border border-amber-100">
+                <div class="aspect-video bg-slate-200 rounded-lg flex items-center justify-center text-slate-500 mb-3">
+                    [YouTube Video Embed]
+                </div>
+                <p class="font-semibold text-amber-900 text-sm">
+                    <span class="lang-si">මහ සෑ රජයාණන් වහන්සේගේ වත්මන් ඉදිකිරීම්</span>
+                    <span class="lang-en">Current Progress Update from Nayaka Thero</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="bg-amber-100/50 py-12 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
+                <span class="lang-si">වත්මන් ඉදි කිරීම් ඡායාරූප</span>
+                <span class="lang-en">Ongoing Activity Photos</span>
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="bg-slate-300 h-40 rounded-lg flex items-center justify-center text-slate-600 text-xs">Photo 1</div>
+                <div class="bg-slate-300 h-40 rounded-lg flex items-center justify-center text-slate-600 text-xs">Photo 2</div>
+                <div class="bg-slate-300 h-40 rounded-lg flex items-center justify-center text-slate-600 text-xs">Photo 3</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bank Details & Inquiry Form -->
+    <section class="max-w-4xl mx-auto py-12 px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Official Bank Account Details -->
+            <div class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md">
+                <h3 class="text-xl font-bold text-amber-200 mb-4">
+                    <span class="lang-si">බැංකු ගිණුම් තොරතුරු</span>
+                    <span class="lang-en">Bank Account Details</span>
+                </h3>
+                <div class="space-y-3 text-sm">
+                    <p><strong><span class="lang-si">ගිණුමේ නම:</span><span class="lang-en">Account Name:</span></strong><br> Sri Dharmaraja Dayaka Sabhawa</p>
+                    <p><strong><span class="lang-si">බැංකුව:</span><span class="lang-en">Bank:</span></strong><br> Bank of Ceylon (BOC)</p>
+                    <p><strong><span class="lang-si">ශාඛාව:</span><span class="lang-en">Branch:</span></strong><br> Colombo Main Branch</p>
+                    <p><strong><span class="lang-si">ගිණුම් අංකය:</span><span class="lang-en">Account Number:</span></strong><br> <span class="text-lg font-mono text-amber-300">1234567890</span></p>
+                </div>
+            </div>
+
+            <!-- Receipt & Inquiry Form -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-200">
+                <h3 class="text-xl font-bold text-amber-900 mb-4">
+                    <span class="lang-si">කෙලින්ම විමසන්න / ලැබීම් පත එවන්න</span>
+                    <span class="lang-en">Inquiry & Slip Submission</span>
+                </h3>
+                <form class="space-y-3 text-sm">
+                    <div>
+                        <label class="block font-medium text-slate-700 mb-1">
+                            <span class="lang-si">ඔබගේ නම</span>
+                            <span class="lang-en">Your Name</span>
+                        </label>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-medium text-slate-700 mb-1">
+                            <span class="lang-si">දුරකථන අංකය</span>
+                            <span class="lang-en">Phone Number</span>
+                        </label>
+                        <input type="tel" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-medium text-slate-700 mb-1">
+                            <span class="lang-si">පණිවිඩය / පැතුම</span>
+                            <span class="lang-en">Message or Wish</span>
+                        </label>
+                        <textarea rows="3" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
+                    </div>
+                    <button type="button" class="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-2 px-4 rounded-lg transition">
+                        <span class="lang-si">පණිවිඩය යොමු කරන්න</span>
+                        <span class="lang-en">Send Inquiry</span>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-amber-950 text-amber-200/80 py-6 text-center text-xs">
+        <p>
+            <span class="lang-si">ශ්‍රී ධර්මරාජ විහාරස්ථ දායක සභාව විසින් පාලනය කරනු ලබයි.</span>
+            <span class="lang-en">Maintained by the Dayaka Sabhawa of Sri Dharmaraja Temple.</span>
+        </p>
+    </footer>
+
+    <!-- Language Toggle Script -->
+    <script>
+        let currentLang = 'si';
+        function toggleLanguage() {
+            const siElements = document.querySelectorAll('.lang-si');
+            const enElements = document.querySelectorAll('.lang-en');
+
+            if (currentLang === 'si') {
+                siElements.forEach(el => el.style.display = 'none');
+                enElements.forEach(el => el.style.display = 'inline-block');
+                currentLang = 'en';
+            } else {
+                enElements.forEach(el => el.style.display = 'none');
+                siElements.forEach(el => el.style.display = 'inline-block');
+                currentLang = 'si';
+            }
+        }
+    </script>
+</body>
+</html>
