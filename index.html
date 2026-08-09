@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>සූවිසි මහ සෑ රජයාණන් වහන්සේ නිර්මාණ පූජෝපහාරය | Sacred Stupa Project</title>
+    <title>ශ්‍රී සම්බෝධි මහා විහාරස්ථ අභිනව චෛත්‍ය රාජයාණන් වහන්සේ ඉදිකිරීමේ මහා පුණ්‍ය කර්මය
+ | Sacred Stupa Project</title>
     <!-- Tailwind CSS for Layout -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Sinhala Web Font -->
@@ -19,8 +20,8 @@
     <nav class="bg-amber-900 text-amber-100 p-4 sticky top-0 z-50 shadow-md">
         <div class="max-w-5xl mx-auto flex justify-between items-center">
             <h1 class="font-bold text-lg md:text-xl">
-                <span class="lang-si">ශ්‍රී ධර්මරාජ විහාරය</span>
-                <span class="lang-en">Sri Dharmaraja Temple</span>
+                <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය</span>
+                <span class="lang-en">Sri Sambodhi Viharaya</span>
             </h1>
             <!-- Language Toggle Switch -->
             <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500">
@@ -44,7 +45,7 @@
         </div>
     </header>
 
-    <!-- Graphical Progress Tracker -->
+    <!-- Dynamic Graphical Progress Tracker -->
     <section class="max-w-4xl mx-auto -mt-6 px-4">
         <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-amber-200">
             <h3 class="text-xl font-bold text-amber-900 mb-4 text-center">
@@ -52,10 +53,10 @@
                 <span class="lang-en">Fundraising Progress</span>
             </h3>
             
-            <!-- Progress Bar -->
+            <!-- Dynamic Progress Bar -->
             <div class="w-full bg-slate-200 rounded-full h-6 mb-4 overflow-hidden">
-                <div class="bg-amber-500 h-6 rounded-full text-xs font-bold text-amber-950 text-center leading-6" style="width: 42%;">
-                    42%
+                <div id="progressBar" class="bg-amber-500 h-6 rounded-full text-xs font-bold text-amber-950 text-center leading-6 transition-all duration-500" style="width: 0%;">
+                    0%
                 </div>
             </div>
 
@@ -65,60 +66,39 @@
                         <span class="lang-si">ලැබී ඇති මුදල</span>
                         <span class="lang-en">Raised So Far</span>
                     </span>
-                    <span class="text-amber-800 font-bold">LKR 6,300,000</span>
+                    <span id="raisedText" class="text-amber-800 font-bold">LKR 0</span>
                 </div>
                 <div class="text-right">
                     <span class="block text-slate-500 text-xs">
                         <span class="lang-si">අපේක්ෂිත මුදල</span>
                         <span class="lang-en">Total Goal</span>
                     </span>
-                    <span class="text-slate-800">LKR 15,000,000</span>
+                    <span id="goalText" class="text-slate-800">LKR 0</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Dhamma Sayings & Video Section -->
+    <!-- Dynamic Video Section -->
     <section class="max-w-4xl mx-auto py-12 px-4">
         <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
             <span class="lang-si">පූජනීය ස්වාමීන් වහන්සේලාගේ අනුශාසනා</span>
             <span class="lang-en">Dhamma Advice & Blessings</span>
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Video Container 1 -->
-            <div class="bg-white p-4 rounded-xl shadow-md border border-amber-100">
-                <div class="aspect-video bg-slate-200 rounded-lg flex items-center justify-center text-slate-500 mb-3">
-                    [YouTube Video Embed]
-                </div>
-                <p class="font-semibold text-amber-900 text-sm">
-                    <span class="lang-si">ස්තූප පූජාවේ ආනිශංස පිළිබඳ දේශනාව</span>
-                    <span class="lang-en">Blessings and Merit of Stupa Construction</span>
-                </p>
-            </div>
-            <!-- Video Container 2 -->
-            <div class="bg-white p-4 rounded-xl shadow-md border border-amber-100">
-                <div class="aspect-video bg-slate-200 rounded-lg flex items-center justify-center text-slate-500 mb-3">
-                    [YouTube Video Embed]
-                </div>
-                <p class="font-semibold text-amber-900 text-sm">
-                    <span class="lang-si">මහ සෑ රජයාණන් වහන්සේගේ වත්මන් ඉදිකිරීම්</span>
-                    <span class="lang-en">Current Progress Update from Nayaka Thero</span>
-                </p>
-            </div>
+        <div id="videoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <p class="text-center text-slate-500 col-span-2">Loading videos...</p>
         </div>
     </section>
 
-    <!-- Photo Gallery -->
+    <!-- Dynamic Photo Gallery -->
     <section class="bg-amber-100/50 py-12 px-4">
         <div class="max-w-4xl mx-auto">
             <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
                 <span class="lang-si">වත්මන් ඉදි කිරීම් ඡායාරූප</span>
                 <span class="lang-en">Ongoing Activity Photos</span>
             </h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div class="bg-slate-300 h-40 rounded-lg flex items-center justify-center text-slate-600 text-xs">Photo 1</div>
-                <div class="bg-slate-300 h-40 rounded-lg flex items-center justify-center text-slate-600 text-xs">Photo 2</div>
-                <div class="bg-slate-300 h-40 rounded-lg flex items-center justify-center text-slate-600 text-xs">Photo 3</div>
+            <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <p class="text-center text-slate-500 col-span-3">Loading photos...</p>
             </div>
         </div>
     </section>
@@ -187,8 +167,11 @@
         </p>
     </footer>
 
-    <!-- Language Toggle Script -->
+    <!-- Scripts -->
     <script>
+        const SHEET_ID = '15qADyrgkH9hIZFn5gyzbxz0fgyKz9v_hzo70FuZS9Ss';
+
+        // 1. Language Switcher
         let currentLang = 'si';
         function toggleLanguage() {
             const siElements = document.querySelectorAll('.lang-si');
@@ -204,6 +187,97 @@
                 currentLang = 'si';
             }
         }
+
+        // Helper to convert regular YouTube URLs to Embed URLs
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return '';
+            let videoId = '';
+            if (url.includes('v=')) {
+                videoId = url.split('v=')[1].split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('embed/')) {
+                return url;
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+        }
+
+        // 2. Fetch Dynamic Progress Data
+        fetch(`https://opensheet.elk.sh/${SHEET_ID}/Progress`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    const row = data[0];
+                    const goal = parseFloat(row.Goal) || 0;
+                    const raised = parseFloat(row.Raised) || 0;
+                    const percentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
+
+                    const bar = document.getElementById('progressBar');
+                    bar.style.width = `${percentage}%`;
+                    bar.textContent = `${percentage}%`;
+
+                    document.getElementById('raisedText').textContent = row.Raised_Formatted || `LKR ${raised.toLocaleString()}`;
+                    document.getElementById('goalText').textContent = row.Target_Formatted || `LKR ${goal.toLocaleString()}`;
+                }
+            })
+            .catch(err => console.error('Error fetching progress data:', err));
+
+        // 3. Fetch Videos from Google Sheet
+        fetch(`https://opensheet.elk.sh/${SHEET_ID}/Videos`)
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('videoContainer');
+                container.innerHTML = '';
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p class="text-center text-slate-500 col-span-2">No videos added yet.</p>';
+                    return;
+                }
+                data.forEach(item => {
+                    const embedUrl = getYouTubeEmbedUrl(item.URL);
+                    if (embedUrl) {
+                        const card = document.createElement('div');
+                        card.className = 'bg-white p-4 rounded-xl shadow-md border border-amber-100';
+                        card.innerHTML = `
+                            <div class="aspect-video bg-slate-200 rounded-lg overflow-hidden mb-3">
+                                <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                            <p class="font-semibold text-amber-900 text-sm">${item.Title || ''}</p>
+                        `;
+                        container.appendChild(card);
+                    }
+                });
+            })
+            .catch(err => {
+                console.error('Error fetching videos:', err);
+                document.getElementById('videoContainer').innerHTML = '<p class="text-center text-red-500 col-span-2">Unable to load videos. Make sure the sheet is public.</p>';
+            });
+
+        // 4. Fetch Gallery from Google Sheet
+        fetch(`https://opensheet.elk.sh/${SHEET_ID}/Gallery`)
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('galleryContainer');
+                container.innerHTML = '';
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>';
+                    return;
+                }
+                data.forEach(item => {
+                    if (item.Image_URL) {
+                        const card = document.createElement('div');
+                        card.className = 'bg-white rounded-xl shadow-md overflow-hidden border border-amber-100';
+                        card.innerHTML = `
+                            <img src="${item.Image_URL}" alt="${item.Caption || 'Gallery Photo'}" class="w-full h-44 object-cover">
+                            ${item.Caption ? `<p class="p-2 text-xs text-slate-600 text-center">${item.Caption}</p>` : ''}
+                        `;
+                        container.appendChild(card);
+                    }
+                });
+            })
+            .catch(err => {
+                console.error('Error fetching gallery:', err);
+                document.getElementById('galleryContainer').innerHTML = '<p class="text-center text-red-500 col-span-3">Unable to load gallery photos. Make sure the sheet is public.</p>';
+            });
     </script>
 </body>
 </html>
