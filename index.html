@@ -188,7 +188,28 @@
             }
         }
 
-        // Helper to convert regular YouTube URLs to Embed URLs
+        // Helper to fetch directly from Google's Native GViz API
+        async function fetchGoogleSheet(tabName) {
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tabName)}`;
+            const res = await fetch(url);
+            const text = await res.text();
+            // Parse Google's JSON wrap
+            const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+            
+            const cols = json.table.cols.map(c => c.label);
+            return json.table.rows.map(r => {
+                let obj = {};
+                r.c.forEach((cell, idx) => {
+                    const key = cols[idx];
+                    if (key) {
+                        obj[key] = cell && cell.v !== null ? cell.v : '';
+                    }
+                });
+                return obj;
+            });
+        }
+
+        // Helper to convert YouTube URLs
         function getYouTubeEmbedUrl(url) {
             if (!url) return '';
             let videoId = '';
@@ -202,12 +223,13 @@
             return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
         }
 
-        // 2. Fetch Dynamic Progress Data
-        fetch(`https://opensheet.elk.sh/${SHEET_ID}/Progress`)
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.length > 0) {
-                    const row = data[0];
+        // Load Data on Startup
+        async function loadWebsiteData() {
+            // A. Progress Data
+            try {
+                const progressData = await fetchGoogleSheet('Progress');
+                if (progressData && progressData.length > 0) {
+                    const row = progressData[0];
                     const goal = parseFloat(row.Goal) || 0;
                     const raised = parseFloat(row.Raised) || 0;
                     const percentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
@@ -219,65 +241,64 @@
                     document.getElementById('raisedText').textContent = row.Raised_Formatted || `LKR ${raised.toLocaleString()}`;
                     document.getElementById('goalText').textContent = row.Target_Formatted || `LKR ${goal.toLocaleString()}`;
                 }
-            })
-            .catch(err => console.error('Error fetching progress data:', err));
+            } catch (err) {
+                console.error('Error loading progress:', err);
+            }
 
-        // 3. Fetch Videos from Google Sheet
-        fetch(`https://opensheet.elk.sh/${SHEET_ID}/Videos`)
-            .then(res => res.json())
-            .then(data => {
+            // B. Video Data
+            try {
+                const videoData = await fetchGoogleSheet('Videos');
                 const container = document.getElementById('videoContainer');
                 container.innerHTML = '';
-                if (!data || data.length === 0) {
+                if (!videoData || videoData.length === 0) {
                     container.innerHTML = '<p class="text-center text-slate-500 col-span-2">No videos added yet.</p>';
-                    return;
+                } else {
+                    videoData.forEach(item => {
+                        const embedUrl = getYouTubeEmbedUrl(item.URL);
+                        if (embedUrl) {
+                            const card = document.createElement('div');
+                            card.className = 'bg-white p-4 rounded-xl shadow-md border border-amber-100';
+                            card.innerHTML = `
+                                <div class="aspect-video bg-slate-200 rounded-lg overflow-hidden mb-3">
+                                    <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                                </div>
+                                <p class="font-semibold text-amber-900 text-sm">${item.Title || ''}</p>
+                            `;
+                            container.appendChild(card);
+                        }
+                    });
                 }
-                data.forEach(item => {
-                    const embedUrl = getYouTubeEmbedUrl(item.URL);
-                    if (embedUrl) {
-                        const card = document.createElement('div');
-                        card.className = 'bg-white p-4 rounded-xl shadow-md border border-amber-100';
-                        card.innerHTML = `
-                            <div class="aspect-video bg-slate-200 rounded-lg overflow-hidden mb-3">
-                                <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-                            </div>
-                            <p class="font-semibold text-amber-900 text-sm">${item.Title || ''}</p>
-                        `;
-                        container.appendChild(card);
-                    }
-                });
-            })
-            .catch(err => {
-                console.error('Error fetching videos:', err);
-                document.getElementById('videoContainer').innerHTML = '<p class="text-center text-red-500 col-span-2">Unable to load videos. Make sure the sheet is public.</p>';
-            });
+            } catch (err) {
+                console.error('Error loading videos:', err);
+            }
 
-        // 4. Fetch Gallery from Google Sheet
-        fetch(`https://opensheet.elk.sh/${SHEET_ID}/Gallery`)
-            .then(res => res.json())
-            .then(data => {
+            // C. Gallery Data
+            try {
+                const galleryData = await fetchGoogleSheet('Gallery');
                 const container = document.getElementById('galleryContainer');
                 container.innerHTML = '';
-                if (!data || data.length === 0) {
+                if (!galleryData || galleryData.length === 0) {
                     container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>';
-                    return;
+                } else {
+                    galleryData.forEach(item => {
+                        if (item.Image_URL) {
+                            const card = document.createElement('div');
+                            card.className = 'bg-white rounded-xl shadow-md overflow-hidden border border-amber-100';
+                            card.innerHTML = `
+                                <img src="${item.Image_URL}" alt="${item.Caption || 'Gallery Photo'}" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
+                                ${item.Caption ? `<p class="p-2 text-xs text-slate-600 text-center">${item.Caption}</p>` : ''}
+                            `;
+                            container.appendChild(card);
+                        }
+                    });
                 }
-                data.forEach(item => {
-                    if (item.Image_URL) {
-                        const card = document.createElement('div');
-                        card.className = 'bg-white rounded-xl shadow-md overflow-hidden border border-amber-100';
-                        card.innerHTML = `
-                            <img src="${item.Image_URL}" alt="${item.Caption || 'Gallery Photo'}" class="w-full h-44 object-cover">
-                            ${item.Caption ? `<p class="p-2 text-xs text-slate-600 text-center">${item.Caption}</p>` : ''}
-                        `;
-                        container.appendChild(card);
-                    }
-                });
-            })
-            .catch(err => {
-                console.error('Error fetching gallery:', err);
-                document.getElementById('galleryContainer').innerHTML = '<p class="text-center text-red-500 col-span-3">Unable to load gallery photos. Make sure the sheet is public.</p>';
-            });
+            } catch (err) {
+                console.error('Error loading gallery:', err);
+            }
+        }
+
+        // Initialize
+        loadWebsiteData();
     </script>
 </body>
 </html>
