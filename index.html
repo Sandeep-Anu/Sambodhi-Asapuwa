@@ -9,6 +9,7 @@
     <!-- Sinhala Web Font -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans Sinhala', sans-serif; }
         .lang-en { display: none; }
     </style>
@@ -16,14 +17,60 @@
 <body class="bg-amber-50 text-slate-800">
 
     <!-- Navigation Header -->
-   <nav class="bg-amber-900 text-amber-100 p-4 sticky top-0 z-50 shadow-md">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
+   <nav class="bg-amber-900 text-amber-100 sticky top-0 z-50 shadow-md">
+        <div class="max-w-5xl mx-auto flex justify-between items-center p-4">
             <h1 class="font-bold text-lg md:text-xl">
                 <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය</span>
                 <span class="lang-en">Sri Sambodhi Viharaya</span>
             </h1>
-            <!-- Language Toggle Switch -->
-            <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500 transition">
+
+            <!-- Desktop Nav Links -->
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#gallery" class="font-medium hover:text-amber-300 transition">
+                    <span class="lang-si">ගැලරිය</span>
+                    <span class="lang-en">Gallery</span>
+                </a>
+                <a href="#contact" class="font-medium hover:text-amber-300 transition">
+                    <span class="lang-si">අප අමතන්න</span>
+                    <span class="lang-en">Contact Us</span>
+                </a>
+                <a href="#donate" class="bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-1.5 rounded-full transition">
+                    <span class="lang-si">දැන්ම දායක වන්න</span>
+                    <span class="lang-en">Donate Now</span>
+                </a>
+                <!-- Language Toggle Switch -->
+                <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500 transition">
+                    <span class="lang-si">English Version</span>
+                    <span class="lang-en">සිංහල පිටුව</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="md:hidden p-1.5 -mr-1.5" aria-label="Menu">
+                <svg id="menuIconOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg id="menuIconClose" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Links -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-amber-700 px-4 pb-4 pt-2 space-y-2">
+            <a href="#gallery" onclick="closeMobileMenu()" class="block py-2 font-medium hover:text-amber-300">
+                <span class="lang-si">ඡායාරූප එකතුව</span>
+                <span class="lang-en">Gallery</span>
+            </a>
+            <a href="#contact" onclick="closeMobileMenu()" class="block py-2 font-medium hover:text-amber-300">
+                <span class="lang-si">අමතන්න</span>
+                <span class="lang-en">Contact Us</span>
+            </a>
+            <a href="#donate" onclick="closeMobileMenu()" class="block text-center bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-2 rounded-lg">
+                <span class="lang-si">දැන්ම දායක වන්න</span>
+                <span class="lang-en">Donate Now</span>
+            </a>
+            <button onclick="toggleLanguage()" class="w-full bg-amber-700 hover:bg-amber-600 px-3 py-2 rounded-lg text-sm font-semibold border border-amber-500 transition">
                 <span class="lang-si">English Version</span>
                 <span class="lang-en">සිංහල පිටුව</span>
             </button>
@@ -91,7 +138,7 @@
     </section>
 
     <!-- Dynamic Photo Gallery -->
-    <section class="bg-amber-100/50 py-12 px-4">
+    <section id="gallery" class="bg-amber-100/50 py-12 px-4 scroll-mt-24">
         <div class="max-w-4xl mx-auto">
             <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
                 <span class="lang-si">වත්මන් ඉදි කිරීම්</span>
@@ -108,7 +155,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             <!-- Official Bank Account Details -->
-            <div class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md">
+            <div id="donate" class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md scroll-mt-24">
                 <h3 class="text-xl font-bold text-amber-200 mb-4">
                     <span class="lang-si">බැංකු ගිණුම් තොරතුරු</span>
                     <span class="lang-en">Bank Account Details</span>
@@ -122,7 +169,7 @@
             </div>
 
             <!-- Receipt & Inquiry Form -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-200">
+            <div id="contact" class="bg-white p-6 rounded-2xl shadow-md border border-amber-200 scroll-mt-24">
                 <h3 class="text-xl font-bold text-amber-900 mb-4">
                     <span class="lang-si">විමසන්න </span>
                     <span class="lang-en">Inquiry & Slip Submission</span>
@@ -264,6 +311,18 @@
                 videoId = url.split('youtu.be/')[1].split('?')[0];
             }
             return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+        }
+
+        // Mobile Nav Menu Toggle
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+            document.getElementById('menuIconOpen').classList.toggle('hidden');
+            document.getElementById('menuIconClose').classList.toggle('hidden');
+        }
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.add('hidden');
+            document.getElementById('menuIconOpen').classList.remove('hidden');
+            document.getElementById('menuIconClose').classList.add('hidden');
         }
 
         // Simple Form Submission Handler
