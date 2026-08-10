@@ -147,6 +147,14 @@
             <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <p class="text-center text-slate-500 col-span-3">Loading photos...</p>
             </div>
+            <!-- View More Button -->
+            <div id="galleryViewMoreContainer" class="text-center mt-6 hidden">
+                <button id="galleryViewMoreBtn" onclick="showMoreGallery()" class="view-more-btn bg-amber-600 hover:bg-amber-700 text-white font-bold px-8 py-3 rounded-full transition shadow-lg">
+                    <span class="lang-si">තවත් ඡායාරූප බලන්න</span>
+                    <span class="lang-en">View More Photos</span>
+                    <span id="galleryCountBadge" class="ml-2 bg-amber-800 text-amber-100 text-xs px-2 py-0.5 rounded-full"></span>
+                </button>
+            </div>
         </div>
     </section>
 
@@ -438,6 +446,49 @@
             } catch (err) {
                 console.error('Error loading gallery:', err);
                 document.getElementById('galleryContainer').innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">Couldn't load photos (${err.message})</p>`;
+            }
+        }
+                // Gallery View More Function
+        function showMoreGallery() {
+            const container = document.getElementById('galleryContainer');
+            const currentItems = container.querySelectorAll('.gallery-item');
+            const currentCount = currentItems.length;
+            const totalCount = galleryAllItems.length;
+
+            // Show next batch (3 more or remaining)
+            const nextBatch = galleryAllItems.slice(currentCount, currentCount + 3);
+
+            nextBatch.forEach((item, index) => {
+                const imageUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
+                const caption = pickField(item, ['Caption', 'Description', 'Title']);
+
+                if (imageUrl) {
+                    const card = document.createElement('div');
+                    card.className = 'gallery-item bg-white rounded-xl shadow-md overflow-hidden border border-amber-100';
+                    card.style.animationDelay = `${(index + 1) * 0.1}s`;
+                    card.innerHTML = `
+                        <img src="${imageUrl}" alt="${caption || 'Gallery Photo'}" loading="lazy" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
+                        ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
+                    `;
+                    container.appendChild(card);
+                }
+            });
+
+            // Update or hide button
+            const newTotal = container.querySelectorAll('.gallery-item').length;
+            const btnContainer = document.getElementById('galleryViewMoreContainer');
+            const badge = document.getElementById('galleryCountBadge');
+
+            if (newTotal >= totalCount) {
+                btnContainer.classList.add('hidden');
+            } else {
+                badge.textContent = `+${totalCount - newTotal}`;
+            }
+
+            // Smooth scroll to new items
+            const newItems = container.querySelectorAll('.gallery-item');
+            if (newItems[currentCount]) {
+                newItems[currentCount].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
 
