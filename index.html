@@ -12,6 +12,43 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans Sinhala', sans-serif; }
         .lang-en { display: none; }
+        
+        /* Stupa Animation Keyframes */
+        @keyframes buildUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 2px #fde047) drop-shadow(0 0 5px #fbbf24); 
+                transform: scale(1); 
+            }
+            50% { 
+                /* Multi-layered drop-shadow to simulate expanding golden rays */
+                filter: drop-shadow(0 0 8px #fef08a) drop-shadow(0 0 15px #fde047) drop-shadow(0 0 25px #eab308); 
+                transform: scale(1.4); 
+            }
+        }
+        
+        /* Stupa Parts Setup */
+        .stupa-part {
+            opacity: 0;
+            animation: buildUp 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        /* Sequential Delays */
+        .stupa-base-1 { animation-delay: 0.2s; }
+        .stupa-base-2 { animation-delay: 0.6s; }
+        .stupa-base-3 { animation-delay: 1.0s; }
+        .stupa-dome   { animation-delay: 1.5s; }
+        .stupa-harmika{ animation-delay: 2.1s; }
+        .stupa-spire  { animation-delay: 2.7s; }
+        .stupa-pin    {
+            /* Builds up first, then loops a brilliant golden glow effect continuously */
+            animation: buildUp 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) 3.3s, 
+                       pulseGlow 2.5s infinite ease-in-out 4.0s;
+            transform-origin: 50px 11px;
+        }
     </style>
 </head>
 <body class="bg-amber-50 text-slate-800">
@@ -19,10 +56,34 @@
     <!-- Navigation Header -->
    <nav class="bg-amber-900 text-amber-100 sticky top-0 z-50 shadow-md">
         <div class="max-w-5xl mx-auto flex justify-between items-center p-4">
-            <h1 class="font-bold text-lg md:text-xl">
-                <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය</span>
-                <span class="lang-en">Sri Sambodhi Viharaya</span>
-            </h1>
+            
+            <!-- Flex Container to hold Title and Small Stupa together -->
+            <div class="flex items-center gap-3">
+                <h1 class="font-bold text-lg md:text-xl">
+                    <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය</span>
+                    <span class="lang-en">Sri Sambodhi Viharaya</span>
+                </h1>
+                
+                <!-- Title Bar Mini Stupa Animation -->
+                <div class="w-10 h-10 flex-shrink-0">
+                    <svg viewBox="0 0 100 100" class="w-full h-full overflow-visible">
+                        <!-- Base 1 -->
+                        <rect x="10" y="85" width="80" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-1" />
+                        <!-- Base 2 -->
+                        <rect x="18" y="79" width="64" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-2" />
+                        <!-- Base 3 -->
+                        <rect x="26" y="73" width="48" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-3" />
+                        <!-- Dome (Anda) -->
+                        <path d="M 28 73 A 22 22 0 0 1 72 73 Z" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-dome" />
+                        <!-- Harmika -->
+                        <rect x="43" y="43" width="14" height="8" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-harmika" />
+                        <!-- Spire (Koth Kerella) -->
+                        <polygon points="44,43 56,43 51,15 49,15" fill="#fbbf24" stroke="#b45309" stroke-width="1" class="stupa-part stupa-spire" />
+                        <!-- Pinnacle (Chudamanikya) -->
+                        <circle cx="50" cy="11" r="3.5" fill="#ef4444" stroke="#7f1d1d" stroke-width="1" class="stupa-part stupa-pin" />
+                    </svg>
+                </div>
+            </div>
 
             <!-- Desktop Nav Links -->
             <div class="hidden md:flex items-center gap-6">
@@ -147,14 +208,6 @@
             <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <p class="text-center text-slate-500 col-span-3">Loading photos...</p>
             </div>
-            <!-- View More Button -->
-            <div id="galleryViewMoreContainer" class="text-center mt-6 hidden">
-                <button id="galleryViewMoreBtn" onclick="showMoreGallery()" class="view-more-btn bg-amber-600 hover:bg-amber-700 text-white font-bold px-8 py-3 rounded-full transition shadow-lg">
-                    <span class="lang-si">තවත් ඡායාරූප බලන්න</span>
-                    <span class="lang-en">View More Photos</span>
-                    <span id="galleryCountBadge" class="ml-2 bg-amber-800 text-amber-100 text-xs px-2 py-0.5 rounded-full"></span>
-                </button>
-            </div>
         </div>
     </section>
 
@@ -162,22 +215,51 @@
     <section class="max-w-4xl mx-auto py-12 px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-            <!-- Official Bank Account Details -->
-            <div id="donate" class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md scroll-mt-24">
-                <h3 class="text-xl font-bold text-amber-200 mb-4">
-                    <span class="lang-si">බැංකු ගිණුම් තොරතුරු</span>
-                    <span class="lang-en">Bank Account Details</span>
-                </h3>
-                <div class="space-y-3 text-sm">
-                    <p><strong><span class="lang-si">ගිණුමේ නම:</span><span class="lang-en">Account Name:</span></strong><br> Sri Sambodhi Viharastha Karya Sadaka Samithiya</p>
-                    <p><strong><span class="lang-si">බැංකුව:</span><span class="lang-en">Bank:</span></strong><br> Hatton National Bank (HNB) </p>
-                    <p><strong><span class="lang-si">ශාඛාව:</span><span class="lang-en">Branch:</span></strong><br> Ragama Branch</p>
-                    <p><strong><span class="lang-si">ගිණුම් අංකය:</span><span class="lang-en">Account Number:</span></strong><br> <span class="text-lg font-mono text-amber-300">102020383865</span></p>
-                     <a href="https://forms.gle/X8Z1CbhhhyHLJqQi6" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-2 rounded-full transition">
-                        <span class="lang-si">ගෙවීම් පත්‍රිකාව උඩුගත කරන්න</span>
-                        <span class="lang-en">Upload Payslip</span>
-                    </a>
+            <!-- Official Bank Account Details (Updated with Stupa Animation) -->
+            <div id="donate" class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md scroll-mt-24 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6 overflow-hidden">
+                
+                <!-- Details Section -->
+                <div class="flex-1 w-full text-left">
+                    <h3 class="text-xl font-bold text-amber-200 mb-4">
+                        <span class="lang-si">බැංකු ගිණුම් තොරතුරු</span>
+                        <span class="lang-en">Bank Account Details</span>
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <p><strong><span class="lang-si">ගිණුමේ නම:</span><span class="lang-en">Account Name:</span></strong><br> Sri Sambodhi Viharastha Karya Sadaka Samithiya</p>
+                        <p><strong><span class="lang-si">බැංකුව:</span><span class="lang-en">Bank:</span></strong><br> Hatton National Bank (HNB) </p>
+                        <p><strong><span class="lang-si">ශාඛාව:</span><span class="lang-en">Branch:</span></strong><br> Ragama Branch</p>
+                        <p><strong><span class="lang-si">ගිණුම් අංකය:</span><span class="lang-en">Account Number:</span></strong><br> <span class="text-lg font-mono text-amber-300">102020383865</span></p>
+                         <a href="https://forms.gle/X8Z1CbhhhyHLJqQi6" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-2 mt-4 rounded-full transition">
+                            <span class="lang-si">ගෙවීම් පත්‍රිකාව උඩුගත කරන්න</span>
+                            <span class="lang-en">Upload Payslip</span>
+                        </a>
+                    </div>
                 </div>
+
+                <!-- Dynamic Stupa SVG Animation -->
+                <div class="w-40 h-40 flex-shrink-0 flex items-center justify-center relative mt-4 sm:mt-0">
+                    <svg viewBox="0 0 100 100" class="w-full h-full overflow-visible">
+                        <!-- Base 1 -->
+                        <rect x="10" y="85" width="80" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-1" />
+                        <!-- Base 2 -->
+                        <rect x="18" y="79" width="64" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-2" />
+                        <!-- Base 3 -->
+                        <rect x="26" y="73" width="48" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-3" />
+                        
+                        <!-- Dome (Anda) -->
+                        <path d="M 28 73 A 22 22 0 0 1 72 73 Z" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-dome" />
+                        
+                        <!-- Harmika -->
+                        <rect x="43" y="43" width="14" height="8" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-harmika" />
+                        
+                        <!-- Spire (Koth Kerella) -->
+                        <polygon points="44,43 56,43 51,15 49,15" fill="#fbbf24" stroke="#b45309" stroke-width="1" class="stupa-part stupa-spire" />
+                        
+                        <!-- Pinnacle (Chudamanikya) -->
+                        <circle cx="50" cy="11" r="3.5" fill="#ef4444" stroke="#7f1d1d" stroke-width="1" class="stupa-part stupa-pin" />
+                    </svg>
+                </div>
+                
             </div>
              
             <br/>
@@ -186,7 +268,7 @@
             <div id="contact" class="bg-white p-6 rounded-2xl shadow-md border border-amber-200 scroll-mt-24">
                 <h3 class="text-xl font-bold text-amber-900 mb-4">
                     <span class="lang-si">විමසන්න </span>
-                    <span class="lang-en">Inqury</span>
+                    <span class="lang-en">Inquiry</span>
                 </h3>
                 <form id="inquiryForm" onsubmit="handleFormSubmit(event)" class="space-y-3 text-sm">
                     <div>
@@ -249,10 +331,6 @@
             }
         }
 
-        // ---- Helpers for forgiving column-name matching ----
-        // Sheets rarely have header text that matches code exactly ("Image_URL" vs
-        // "Image URL" vs "Photo Link" etc). These helpers strip case/spaces/punctuation
-        // so small header differences don't silently drop every row.
         function normalizeKey(k) {
             return String(k || '').toLowerCase().replace(/[^a-z0-9]/g, '');
         }
@@ -271,13 +349,11 @@
             return '';
         }
 
-        // Helper to fetch directly from Google's Native GViz API
         async function fetchGoogleSheet(tabName) {
             const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(tabName)}`;
             const res = await fetch(url);
             const text = await res.text();
 
-            // Extract pure JSON from GViz wrapper
             const jsonStart = text.indexOf('{');
             const jsonEnd = text.lastIndexOf('}');
             if (jsonStart === -1 || jsonEnd === -1) {
@@ -310,7 +386,6 @@
             });
         }
 
-        // Helper to convert YouTube URLs (including Shorts) to embeddable form
         function getYouTubeEmbedUrl(url) {
             if (!url) return '';
             url = String(url).trim();
@@ -327,7 +402,6 @@
             return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
         }
 
-        // Mobile Nav Menu Toggle
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('hidden');
             document.getElementById('menuIconOpen').classList.toggle('hidden');
@@ -339,16 +413,13 @@
             document.getElementById('menuIconClose').classList.add('hidden');
         }
 
-        // Simple Form Submission Handler
         function handleFormSubmit(e) {
             e.preventDefault();
             alert(currentLang === 'si' ? 'ඔබගේ පණිවිඩය සාර්ථකව යොමු කරන ලදී.' : 'Your message has been submitted successfully.');
             document.getElementById('inquiryForm').reset();
         }
 
-        // Load Data on Startup
         async function loadWebsiteData() {
-            // A. Progress Data
             try {
                 const progressData = await fetchGoogleSheet('Progress');
                 if (progressData && progressData.length > 0) {
@@ -377,7 +448,6 @@
                 errEl.classList.remove('hidden');
             }
 
-            // B. Video Data
             try {
                 const videoData = await fetchGoogleSheet('Videos');
                 const container = document.getElementById('videoContainer');
@@ -414,7 +484,6 @@
                 document.getElementById('videoContainer').innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">Couldn't load videos (${err.message})</p>`;
             }
 
-            // C. Gallery Data
             try {
                 const galleryData = await fetchGoogleSheet('Gallery');
                 const container = document.getElementById('galleryContainer');
@@ -448,51 +517,7 @@
                 document.getElementById('galleryContainer').innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">Couldn't load photos (${err.message})</p>`;
             }
         }
-                // Gallery View More Function
-        function showMoreGallery() {
-            const container = document.getElementById('galleryContainer');
-            const currentItems = container.querySelectorAll('.gallery-item');
-            const currentCount = currentItems.length;
-            const totalCount = galleryAllItems.length;
 
-            // Show next batch (3 more or remaining)
-            const nextBatch = galleryAllItems.slice(currentCount, currentCount + 3);
-
-            nextBatch.forEach((item, index) => {
-                const imageUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
-                const caption = pickField(item, ['Caption', 'Description', 'Title']);
-
-                if (imageUrl) {
-                    const card = document.createElement('div');
-                    card.className = 'gallery-item bg-white rounded-xl shadow-md overflow-hidden border border-amber-100';
-                    card.style.animationDelay = `${(index + 1) * 0.1}s`;
-                    card.innerHTML = `
-                        <img src="${imageUrl}" alt="${caption || 'Gallery Photo'}" loading="lazy" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
-                        ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
-                    `;
-                    container.appendChild(card);
-                }
-            });
-
-            // Update or hide button
-            const newTotal = container.querySelectorAll('.gallery-item').length;
-            const btnContainer = document.getElementById('galleryViewMoreContainer');
-            const badge = document.getElementById('galleryCountBadge');
-
-            if (newTotal >= totalCount) {
-                btnContainer.classList.add('hidden');
-            } else {
-                badge.textContent = `+${totalCount - newTotal}`;
-            }
-
-            // Smooth scroll to new items
-            const newItems = container.querySelectorAll('.gallery-item');
-            if (newItems[currentCount]) {
-                newItems[currentCount].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }
-
-        // Initialize
         loadWebsiteData();
     </script>
 </body>
