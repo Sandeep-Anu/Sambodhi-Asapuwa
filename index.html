@@ -195,6 +195,22 @@
     shadow-intensity="1" 
     style="width: 100%; height: 500px; background-color: #f5f5f5;touch-action: pan-y">
   </model-viewer>
+    <!-- Overlay hint button -->
+  <button id="interactBtn" style="
+    position: absolute; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    padding: 10px 18px; 
+    background: rgba(0, 0, 0, 0.7); 
+    color: #fff; 
+    border: none; 
+    border-radius: 20px; 
+    font-size: 14px; 
+    cursor: pointer;
+    z-index: 10;">
+    View In 3D
+  </button>
 
     <!-- Dynamic Video Section -->
     <section class="max-w-4xl mx-auto py-12 px-4">
@@ -216,6 +232,14 @@
             </h3>
             <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <p class="text-center text-slate-500 col-span-3">Loading photos...</p>
+            </div>
+            
+            <!-- View More Button Container -->
+            <div id="viewMoreContainer" class="text-center mt-8 hidden">
+                <button onclick="showAllGalleryImages()" class="bg-amber-800 hover:bg-amber-900 text-amber-50 font-semibold px-6 py-2.5 rounded-full transition shadow-md border border-amber-700">
+                    <span class="lang-si">තවත් බලන්න</span>
+                    <span class="lang-en">View More</span>
+                </button>
             </div>
         </div>
     </section>
@@ -403,6 +427,12 @@
             document.getElementById('inquiryForm').reset();
         }
 
+        function showAllGalleryImages() {
+            const hiddenCards = document.querySelectorAll('.gallery-extra');
+            hiddenCards.forEach(card => card.classList.remove('hidden'));
+            document.getElementById('viewMoreContainer').classList.add('hidden');
+        }
+
         async function loadWebsiteData() {
             try {
                 const progressData = await fetchGoogleSheet('Progress');
@@ -471,6 +501,7 @@
             try {
                 const galleryData = await fetchGoogleSheet('Gallery');
                 const container = document.getElementById('galleryContainer');
+                const viewMoreContainer = document.getElementById('viewMoreContainer');
                 container.innerHTML = '';
                 if (!galleryData || galleryData.length === 0) {
                     container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>';
@@ -482,7 +513,8 @@
                         if (imageUrl) {
                             addedCount++;
                             const card = document.createElement('div');
-                            card.className = 'bg-white rounded-xl shadow-md overflow-hidden border border-amber-100';
+                            const hideClass = addedCount > 3 ? 'hidden gallery-extra' : '';
+                            card.className = `bg-white rounded-xl shadow-md overflow-hidden border border-amber-100 ${hideClass}`;
                             card.innerHTML = `
                                 <img src="${imageUrl}" alt="${caption || 'Gallery Photo'}" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
                                 ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
@@ -492,6 +524,13 @@
                             console.warn('Skipped a gallery row - no image URL found. Raw row from sheet:', item);
                         }
                     });
+
+                    if (addedCount > 3) {
+                        viewMoreContainer.classList.remove('hidden');
+                    } else {
+                        viewMoreContainer.classList.add('hidden');
+                    }
+
                     if (addedCount === 0) {
                         container.innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">${galleryData.length} row(s) found in "Gallery" tab, but none had a usable image link. Open the browser console for details on each row's actual column names.</p>`;
                     }
