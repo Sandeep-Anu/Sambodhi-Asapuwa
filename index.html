@@ -9,6 +9,8 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <!-- Sinhala Web Font -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans Sinhala', sans-serif; }
@@ -25,7 +27,6 @@
                 transform: scale(1); 
             }
             50% { 
-                /* Multi-layered drop-shadow to simulate expanding golden rays */
                 filter: drop-shadow(0 0 8px #fef08a) drop-shadow(0 0 15px #fde047) drop-shadow(0 0 25px #eab308); 
                 transform: scale(1.4); 
             }
@@ -45,10 +46,58 @@
         .stupa-harmika{ animation-delay: 2.1s; }
         .stupa-spire  { animation-delay: 2.7s; }
         .stupa-pin    {
-            /* Builds up first, then loops a brilliant golden glow effect continuously */
             animation: buildUp 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) 3.3s, 
                        pulseGlow 2.5s infinite ease-in-out 4.0s;
             transform-origin: 50px 11px;
+        }
+
+        /* Social Card Hover Effects */
+        .social-card {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        .social-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border-color: #fbbf24;
+        }
+        .social-icon {
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            font-size: 24px;
+            color: white;
+        }
+        .whatsapp-icon { background: #25D366; }
+        .facebook-icon { background: #1877F2; }
+        .phone-icon { background: #f59e0b; }
+        .social-card:hover .social-icon { transform: scale(1.15) rotate(-5deg); }
+
+        /* Glowing ring effect */
+        .social-ring {
+            position: relative;
+        }
+        .social-ring::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent, transparent, transparent, transparent);
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+        .social-card:hover .social-ring::before {
+            background: conic-gradient(from 45deg, #fbbf24, #f59e0b, #fbbf24, #f59e0b);
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -240,12 +289,12 @@
         </div>
     </section>
 
-    <!-- Bank Details & Inquiry Form -->
-    <section class="max-w-4xl mx-auto py-12 px-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Bank Details & Enhanced Contact Section -->
+    <section id="contact" class="max-w-4xl mx-auto py-12 px-4 scroll-mt-24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-            <!-- Official Bank Account Details (Updated with Stupa Animation) -->
-            <div id="donate" class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md scroll-mt-24 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6 overflow-hidden">
+            <!-- Official Bank Account Details -->
+            <div id="donate" class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md scroll-mt-24 flex flex-col items-start justify-between gap-6 overflow-hidden">
                 
                 <!-- Details Section -->
                 <div class="flex-1 w-full text-left">
@@ -266,41 +315,94 @@
                 </div>                
             </div>
              
-            <br/>
-            <br/>
-            <!-- Receipt & Inquiry Form -->
-            <div id="contact" class="bg-white p-6 rounded-2xl shadow-md border border-amber-200 scroll-mt-24">
+            <!-- Modern Contact / Social Connect Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-200">
                 <h3 class="text-xl font-bold text-amber-900 mb-4">
-                    <span class="lang-si">විමසන්න </span>
-                    <span class="lang-en">Inquiry</span>
+                    <span class="lang-si">අප හා සම්බන්ධ වන්න</span>
+                    <span class="lang-en">Connect With Us</span>
                 </h3>
-                <form id="inquiryForm" onsubmit="handleFormSubmit(event)" class="space-y-3 text-sm">
-                    <div>
-                        <label class="block font-medium text-slate-700 mb-1">
-                            <span class="lang-si">ඔබගේ නම</span>
-                            <span class="lang-en">Your Name</span>
-                        </label>
-                        <input type="text" id="userName" required class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-medium text-slate-700 mb-1">
-                            <span class="lang-si">දුරකථන අංකය</span>
-                            <span class="lang-en">Phone Number</span>
-                        </label>
-                        <input type="tel" id="userPhone" required class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-medium text-slate-700 mb-1">
-                            <span class="lang-si">පණිවිඩය </span>
-                            <span class="lang-en">Message or Wish</span>
-                        </label>
-                        <textarea id="userMessage" rows="3" required class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-2 px-4 rounded-lg transition">
-                        <span class="lang-si">පණිවිඩය යොමු කරන්න</span>
-                        <span class="lang-en">Send Inquiry</span>
-                    </button>
-                </form>
+                <p class="text-slate-600 text-sm mb-6">
+                    <span class="lang-si">ඔබගේ ප්‍රශ්න, අදහස් හෝ දායකත්වය සම්බන්ධයෙන් අප හා සම්බන්ධ වන්න.</span>
+                    <span class="lang-en">Reach out to us for any questions, feedback, or donations.</span>
+                </p>
+                
+                <!-- Social & Contact Cards Grid -->
+                <div class="grid grid-cols-1 gap-4">
+                    
+                    <!-- WhatsApp Card -->
+                    <a href="https://wa.me/947XXXXXXXXX" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-ring relative flex-shrink-0">
+                                <div class="social-icon whatsapp-icon">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">WhatsApp</p>
+                                <p class="text-xs text-slate-500">
+                                    <span class="lang-si">ක්ෂණික පණිවිඩ යොමු කරන්න</span>
+                                    <span class="lang-en">Send Instant Message</span>
+                                </p>
+                            </div>
+                            <div class="text-amber-400 group-hover:text-amber-600 transition">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Facebook Page Card -->
+                    <a href="https://www.facebook.com/yourpage" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-ring relative flex-shrink-0">
+                                <div class="social-icon facebook-icon">
+                                    <i class="fab fa-facebook-f"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">Facebook</p>
+                                <p class="text-xs text-slate-500">
+                                    <span class="lang-si">අපගේ Facebook පිටුවට පිවිසෙන්න</span>
+                                    <span class="lang-en">Visit Our Facebook Page</span>
+                                </p>
+                            </div>
+                            <div class="text-amber-400 group-hover:text-amber-600 transition">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Phone Call Card -->
+                    <a href="tel:+947XXXXXXXXX" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-ring relative flex-shrink-0">
+                                <div class="social-icon phone-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">
+                                    <span class="lang-si">දුරකථන අමතුම</span>
+                                    <span class="lang-en">Call Us Now</span>
+                                </p>
+                                <p class="text-xs text-slate-500">
+                                    <span class="lang-si">ක්ෂණිකව අමතන්න</span>
+                                    <span class="lang-en">Direct Phone Call</span>
+                                </p>
+                            </div>
+                            <div class="text-amber-400 group-hover:text-amber-600 transition">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-amber-100 text-center">
+                    <p class="text-xs text-slate-400">
+                        <span class="lang-si">අපගේ සමාජ මාධ්‍ය හරහා අප හා සම්බන්ධ වන්න</span>
+                        <span class="lang-en">Follow us on social media for latest updates</span>
+                    </p>
+                </div>
             </div>
 
         </div>
@@ -308,6 +410,15 @@
 
     <!-- Footer -->
     <footer class="bg-amber-950 text-amber-200/80 py-6 text-center text-xs">
+        <iframe 
+    width="100%" 
+    height="450" 
+    style="border:0;" 
+    allowfullscreen="" 
+    loading="lazy" 
+    referrerpolicy="no-referrer-when-downgrade"
+    src="https://maps.google.com/maps?q=Sambhodi+Asapuwa,+Church+Rd,+Sri+Lanka&t=&z=15&ie=UTF8&iwloc=&output=embed">
+    </iframe>
         <p>
             <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ දායක සභාව - 2026</span>
             <span class="lang-en">Donors Association of Sri Sambodhi Vihara - 2026.</span>
@@ -415,12 +526,6 @@
             document.getElementById('mobileMenu').classList.add('hidden');
             document.getElementById('menuIconOpen').classList.remove('hidden');
             document.getElementById('menuIconClose').classList.add('hidden');
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            alert(currentLang === 'si' ? 'ඔබගේ පණිවිඩය සාර්ථකව යොමු කරන ලදී.' : 'Your message has been submitted successfully.');
-            document.getElementById('inquiryForm').reset();
         }
 
         function showAllGalleryImages() {
