@@ -171,14 +171,56 @@
       width: 100%;
       height: 500px;
       background-color: #f5f5f5;
-      pointer-events: none; /* default: no interaction */
+      pointer-events: none;
     }
     #stupaViewer.interactive {
       pointer-events: auto;
     }
+
+    /* ===== JASMINE FALLING PETALS ===== */
+    .petal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+      overflow: hidden;
+    }
+    .jasmine {
+      position: absolute;
+      top: -20px;
+      font-size: 18px;
+      color: rgba(255, 255, 240, 0.85);
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+      opacity: 0;
+      animation: fallAndFade linear forwards;
+      will-change: transform, opacity;
+    }
+    @keyframes fallAndFade {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.6);
+        opacity: 0;
+      }
+      5% {
+        opacity: 0.9;
+        transform: translateY(10px) rotate(8deg) scale(1);
+      }
+      85% {
+        opacity: 0.85;
+      }
+      100% {
+        transform: translateY(calc(100vh + 40px)) rotate(720deg) scale(0.4);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body class="bg-amber-50 text-slate-800">
+
+<!-- ===== JASMINE PETALS (fixed overlay) ===== -->
+<div id="petalContainer" class="petal-container"></div>
 
 <!-- Navigation -->
 <nav class="bg-amber-900 text-amber-100 sticky top-0 z-50 shadow-md">
@@ -230,7 +272,7 @@
       <span class="lang-en">The great meritorious undertaking of constructing the new Chaitya at Sri Sambodhi Vihara.</span>
     </h2>
     <p class="text-base md:text-lg text-amber-100/90 mb-6 max-w-2xl mx-auto drop-shadow">
-      <span class="lang-si">අතිපූජනීය මහා සංඝරත්නයේ අනුශාසනා පරිදි ඉදිකෙරෙන මෙම පූජනීය මහ සෑ රාජයාණන් වහන්සේ ඉදිකිරීමේ පින්කම උදෙසා ඔබත් මුදලින් හෝ ද්‍රව්‍යයෙන් දායකවන්න.</span>
+      <span class="lang-si">අතිපූජනීය මහා සංඝරත්නයේ අනුශාසනා පරිදි ඉදිකෙරෙන මෙම පූජනීය මහ සෑ රජයාණන් වහන්සේ මා හැඟී පින්කම උදෙසා ඔබත් මුදලින් හෝ ද්‍රව්‍යයෙන් දායකවන්න.</span>
       <span class="lang-en">Join hands with us to build a sacred stupa under the guidance of our venerable Mahasangha for future generations.</span>
     </p>
   </div>
@@ -253,7 +295,7 @@
   </div>
 </section>
 
-<!-- 3D Model with fixed interaction -->
+<!-- 3D Model -->
 <section class="max-w-4xl mx-auto my-8 px-4">
   <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-200">
     <model-viewer 
@@ -267,7 +309,7 @@
     <button id="interactBtn" 
       onclick="toggle3DInteraction()"
       class="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-amber-900/90 hover:bg-amber-900 text-amber-100 font-semibold px-6 py-2.5 rounded-full shadow-lg transition z-10 text-sm border border-amber-500">
-      <span class="lang-si">3D මාදිලිය</span>
+      <span class="lang-si">3D මාදිලිය නරඹන්න</span>
       <span class="lang-en">View In 3D</span>
     </button>
   </div>
@@ -281,7 +323,7 @@
   <div id="videoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"><p class="text-center text-slate-500 col-span-2">Loading videos...</p></div>
 </section>
 
-<!-- Gallery (clickable images) -->
+<!-- Gallery -->
 <section id="gallery" class="bg-amber-100/50 py-12 px-4 scroll-mt-24">
   <div class="max-w-4xl mx-auto">
     <h3 class="text-2xl font-bold text-amber-900 text-center mb-8"><span class="lang-si">ඡායාරූප එකතුව</span><span class="lang-en">Gallery</span></h3>
@@ -290,7 +332,7 @@
   </div>
 </section>
 
-<!-- Lightbox (fullscreen image viewer) -->
+<!-- Lightbox -->
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
   <span class="close-btn" onclick="closeLightbox()">&times;</span>
   <img id="lightboxImg" src="" alt="Full size" onclick="event.stopPropagation();" />
@@ -313,22 +355,22 @@
     </div>
     <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-200">
       <h3 class="text-xl font-bold text-amber-900 mb-4"><span class="lang-si">අප හා සම්බන්ධ වන්න</span><span class="lang-en">Connect With Us</span></h3>
-      <p class="text-slate-600 text-sm mb-6"><span class="lang-si">ඔබගේ ගැටලු,අදහස් හෝ දායකත්වය සම්බන්ධයෙන් අප හා සම්බන්ධ වන්න.</span><span class="lang-en">Reach out to us for any questions, feedback, or donations.</span></p>
+      <p class="text-slate-600 text-sm mb-6"><span class="lang-si">ඔබගේ ප්‍රශ්න, අදහස් හෝ දායකත්වය සම්බන්ධයෙන් අප හා සම්බන්ධ වන්න.</span><span class="lang-en">Reach out to us for any questions, feedback, or donations.</span></p>
       <div class="grid grid-cols-1 gap-4">
-        <a href="https://wa.me/94716100566" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
-          <div class="flex items-center gap-4"><div class="social-ring relative flex-shrink-0"><div class="social-icon whatsapp-icon"><i class="fab fa-whatsapp"></i></div></div><div class="flex-1 min-w-0"><p class="font-bold text-slate-800 group-hover:text-amber-900 transition">WhatsApp</p><p class="text-xs text-slate-500"><span class="lang-si"> පණිවිඩ යොමු කරන්න</span><span class="lang-en">Send Instant Message</span></p></div><div class="text-amber-400 group-hover:text-amber-600 transition"><i class="fas fa-arrow-right text-sm"></i></div></div>
+        <a href="https://wa.me/947XXXXXXXXX" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+          <div class="flex items-center gap-4"><div class="social-ring relative flex-shrink-0"><div class="social-icon whatsapp-icon"><i class="fab fa-whatsapp"></i></div></div><div class="flex-1 min-w-0"><p class="font-bold text-slate-800 group-hover:text-amber-900 transition">WhatsApp</p><p class="text-xs text-slate-500"><span class="lang-si">ක්ෂණික පණිවිඩ යොමු කරන්න</span><span class="lang-en">Send Instant Message</span></p></div><div class="text-amber-400 group-hover:text-amber-600 transition"><i class="fas fa-arrow-right text-sm"></i></div></div>
         </a>
         <a href="https://www.facebook.com/yourpage" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
           <div class="flex items-center gap-4"><div class="social-ring relative flex-shrink-0"><div class="social-icon facebook-icon"><i class="fab fa-facebook-f"></i></div></div><div class="flex-1 min-w-0"><p class="font-bold text-slate-800 group-hover:text-amber-900 transition">Facebook</p><p class="text-xs text-slate-500"><span class="lang-si">අපගේ Facebook පිටුවට පිවිසෙන්න</span><span class="lang-en">Visit Our Facebook Page</span></p></div><div class="text-amber-400 group-hover:text-amber-600 transition"><i class="fas fa-arrow-right text-sm"></i></div></div>
         </a>
-        <a href="tel:+94112920240" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
-          <div class="flex items-center gap-4"><div class="social-ring relative flex-shrink-0"><div class="social-icon phone-icon"><i class="fas fa-phone-alt"></i></div></div><div class="flex-1 min-w-0"><p class="font-bold text-slate-800 group-hover:text-amber-900 transition"><span class="lang-si">දුරකථන අමතුම</span><span class="lang-en">Call Us Now</span></p><p class="text-xs text-slate-500"><span class="lang-si">අමතන්න</span><span class="lang-en">Direct Phone Call</span></p></div><div class="text-amber-400 group-hover:text-amber-600 transition"><i class="fas fa-arrow-right text-sm"></i></div></div>
+        <a href="tel:+947XXXXXXXXX" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+          <div class="flex items-center gap-4"><div class="social-ring relative flex-shrink-0"><div class="social-icon phone-icon"><i class="fas fa-phone-alt"></i></div></div><div class="flex-1 min-w-0"><p class="font-bold text-slate-800 group-hover:text-amber-900 transition"><span class="lang-si">දුරකථන අමතුම</span><span class="lang-en">Call Us Now</span></p><p class="text-xs text-slate-500"><span class="lang-si">ක්ෂණිකව අමතන්න</span><span class="lang-en">Direct Phone Call</span></p></div><div class="text-amber-400 group-hover:text-amber-600 transition"><i class="fas fa-arrow-right text-sm"></i></div></div>
         </a>
         <a href="https://maps.app.goo.gl/JUa7TGkPvVnPHmW2A" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
-          <div class="flex items-center gap-4"><div class="social-ring relative flex-shrink-0"><div class="social-icon maps-icon"><i class="fas fa-map-marker-alt"></i></div></div><div class="flex-1 min-w-0"><p class="font-bold text-slate-800 group-hover:text-amber-900 transition"><span class="lang-si">Google Maps</span><span class="lang-en">Google Maps</span></p><p class="text-xs text-slate-500"><span class="lang-si"> Google සිතියම </span><span class="lang-en">View Location on Map</span></p></div><div class="text-amber-400 group-hover:text-amber-600 transition"><i class="fas fa-arrow-right text-sm"></i></div></div>
+          <div class="flex items-center gap-4"><div class="social-ring relative flex-shrink-0"><div class="social-icon maps-icon"><i class="fas fa-map-marker-alt"></i></div></div><div class="flex-1 min-w-0"><p class="font-bold text-slate-800 group-hover:text-amber-900 transition"><span class="lang-si">Google Maps</span><span class="lang-en">Google Maps</span></p><p class="text-xs text-slate-500"><span class="lang-si">ස්ථානය සිතියමෙන් බලන්න</span><span class="lang-en">View Location on Map</span></p></div><div class="text-amber-400 group-hover:text-amber-600 transition"><i class="fas fa-arrow-right text-sm"></i></div></div>
         </a>
       </div>
-      <div class="mt-4 pt-4 border-t border-amber-100 text-center"><p class="text-xs text-slate-400"><span class="lang-si">සමාජ මාධ්‍ය හරහා අප හා සම්බන්ධ වන්න</span><span class="lang-en">Follow us on social media for latest updates</span></p></div>
+      <div class="mt-4 pt-4 border-t border-amber-100 text-center"><p class="text-xs text-slate-400"><span class="lang-si">අපගේ සමාජ මාධ්‍ය හරහා අප හා සම්බන්ධ වන්න</span><span class="lang-en">Follow us on social media for latest updates</span></p></div>
     </div>
   </div>
 </section>
@@ -413,10 +455,7 @@
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
   }
-  // close on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLightbox();
-  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
   // ----- YouTube embed -----
   function getYouTubeEmbedUrl(url) {
@@ -434,10 +473,8 @@
   function toggle3DInteraction() {
     const viewer = document.getElementById('stupaViewer');
     const btn = document.getElementById('interactBtn');
-    // toggle interactive class
     viewer.classList.toggle('interactive');
     const isInteractive = viewer.classList.contains('interactive');
-    // update button text
     const siSpan = btn.querySelector('.lang-si');
     const enSpan = btn.querySelector('.lang-en');
     if (isInteractive) {
@@ -451,6 +488,41 @@
       viewer.setAttribute('auto-rotate', '');
       viewer.style.pointerEvents = 'none';
     }
+  }
+
+  // ========== JASMINE PETALS ==========
+  function startJasmineFall() {
+    const container = document.getElementById('petalContainer');
+    if (!container) return;
+    // Jasmine unicode flower + small petals variations
+    const flowers = ['❀', '✿', '❁'];
+    // create 12–18 petals with random positions & delays
+    const count = 14 + Math.floor(Math.random() * 10);
+    for (let i = 0; i < count; i++) {
+      const petal = document.createElement('span');
+      petal.className = 'jasmine';
+      // pick a flower symbol
+      petal.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+      // random horizontal position
+      const left = Math.random() * 95 + 2;
+      petal.style.left = left + '%';
+      // random size (small)
+      const size = 14 + Math.random() * 14;
+      petal.style.fontSize = size + 'px';
+      // random animation duration between 8–14s (fall speed)
+      const duration = 9 + Math.random() * 6;
+      petal.style.animationDuration = duration + 's';
+      // random delay so they don't all start at once (0–2s)
+      const delay = Math.random() * 2;
+      petal.style.animationDelay = delay + 's';
+      // random rotation & slight opacity variation
+      petal.style.opacity = 0.5 + Math.random() * 0.4;
+      container.appendChild(petal);
+    }
+    // remove petals after they finish (to keep DOM clean)
+    setTimeout(() => {
+      container.innerHTML = '';
+    }, 18000); // max duration ~16s + buffer
   }
 
   // ========== SLIDESHOW ==========
@@ -526,7 +598,7 @@
       if (!added) container.innerHTML = '<p class="text-center text-red-500 col-span-2 text-sm">No usable YouTube links found.</p>';
     } catch (e) { console.warn('Videos error', e); }
 
-    // Gallery (with clickable images + lightbox)
+    // Gallery (clickable)
     try {
       const gd = await fetchGoogleSheet('Gallery');
       const container = document.getElementById('galleryContainer');
@@ -557,9 +629,17 @@
     } catch (e) { console.warn('Gallery error', e); }
   }
 
-  // start
+  // ========== INIT ==========
   loadHeroSlideshow();
   loadWebsiteData();
+
+  // ---- start jasmine fall after 10 seconds ----
+  setTimeout(() => {
+    startJasmineFall();
+    // optionally repeat every 20s for continuous gentle effect (but we only want one wave)
+    // we do a single wave as requested: "starts to fall from top to bottom from 10th second slowly and vanishes effect in 3seconds"
+    // the animation itself fades out at end, so one wave is enough.
+  }, 10000);
 </script>
 </body>
 </html>
