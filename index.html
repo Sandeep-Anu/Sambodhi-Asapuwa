@@ -353,6 +353,26 @@
     return '';
   }
 
+  // Converts a Google Drive "share" link (view/open/uc?id=) into a direct-viewable
+  // image link. Leaves normal image URLs (imgur, googleusercontent, etc.) untouched.
+  function toDirectImageUrl(url) {
+    if (!url) return url;
+    url = String(url).trim();
+    let id = '';
+    let m = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (m) id = m[1];
+    if (!id) {
+      m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (m) id = m[1];
+    }
+    if (!id) {
+      m = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
+      if (m) id = m[1];
+    }
+    if (id) return `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+    return url;
+  }
+
   async function fetchGoogleSheet(tabName) {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(tabName)}`;
     const res = await fetch(url);
@@ -496,6 +516,7 @@
       if (galleryData && galleryData.length) {
         images = galleryData
           .map(item => pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']))
+          .map(url => toDirectImageUrl(url))
           .filter(url => url && String(url).trim().length > 0);
       }
     } catch (e) { console.warn('Slideshow fallback', e); }
@@ -569,7 +590,8 @@
       if (!gd || !gd.length) { container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>'; return; }
       let added = 0;
       gd.forEach(item => {
-        const imgUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
+        const rawUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
+        const imgUrl = toDirectImageUrl(rawUrl);
         const caption = pickField(item, ['Caption', 'Description', 'Title']);
         if (imgUrl) {
           added++;
