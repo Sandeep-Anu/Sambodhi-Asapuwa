@@ -188,9 +188,24 @@
         </div>
     </nav>
 
-    <!-- Hero Banner -->
-    <header class="bg-gradient-to-b from-amber-900 to-amber-800 text-white py-12 px-4 text-center">
-        <div class="max-w-4xl mx-auto">
+    <!-- Hero Banner with Video Background -->
+    <header class="relative bg-amber-950 text-white py-16 md:py-24 px-4 text-center overflow-hidden">
+        <!-- Background Video -->
+        <video 
+            autoplay 
+            loop 
+            muted 
+            playsinline 
+            class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none">
+            <source src="https://sandeep-anu.github.io/Sambodhi-Asapuwa/images/Untitled%20design%20(1).mp4" type="video/mp4">
+            Your browser does not support video playback.
+        </video>
+
+        <!-- Dark/Amber Overlay for readability -->
+        <div class="absolute inset-0 bg-amber-950/75 z-0"></div>
+
+        <!-- Header Content -->
+        <div class="relative z-10 max-w-4xl mx-auto">
             <h2 class="text-3xl md:text-5xl font-extrabold mb-4 text-amber-200">
                 <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ අභිනව චෛත්‍ය රාජයාණන් වහන්සේ ඉදිකිරීමේ මහා පුණ්‍ය කර්මය</span>
                 <span class="lang-en">The great meritorious undertaking of constructing the new Chaitya at Sri Sambodhi Vihara.</span>
@@ -204,7 +219,7 @@
 
     <!-- Dynamic Graphical Progress Tracker -->
     <section class="max-w-4xl mx-auto -mt-6 px-4">
-        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-amber-200">
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-amber-200 relative z-20">
             <h3 class="text-xl font-bold text-amber-900 mb-4 text-center">
                 <span class="lang-si">අරමුදල් ප්‍රගතිය</span>
                 <span class="lang-en">Fundraising Progress</span>
@@ -236,27 +251,29 @@
             <p id="progressError" class="text-center text-red-500 text-xs mt-3 hidden"></p>
         </div>
     </section>
-    <!-- 3D Model Display Section -->
-<section class="max-w-4xl mx-auto my-8 px-4">
-    <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-200">
-        <model-viewer 
-            id="stupaViewer"
-            src="https://sandeep-anu.github.io/Sambodhi-Asapuwa/images/tempimg.glb" 
-            alt="3D Stupa Model" 
-            auto-rotate 
-            shadow-intensity="1" 
-            style="width: 100%; height: 500px; background-color: #f5f5f5;pointer-events: none;">
-        </model-viewer>
 
-        <!-- Interactive Overlay Button -->
-        <button id="interactBtn" 
-            onclick="enable3dInteraction()"
-            class="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-amber-900/90 hover:bg-amber-900 text-amber-100 font-semibold px-6 py-2.5 rounded-full shadow-lg transition z-10 text-sm border border-amber-500">
-            <span class="lang-si">3D මාදිලිය නරඹන්න</span>
-            <span class="lang-en">View In 3D</span>
-        </button>
-    </div>
-</section>
+    <!-- 3D Model Display Section -->
+    <section class="max-w-4xl mx-auto my-8 px-4">
+        <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-200">
+            <model-viewer 
+                id="stupaViewer"
+                src="https://sandeep-anu.github.io/Sambodhi-Asapuwa/images/tempimg.glb" 
+                alt="3D Stupa Model" 
+                auto-rotate 
+                shadow-intensity="1" 
+                style="width: 100%; height: 500px; background-color: #f5f5f5;pointer-events: none;">
+            </model-viewer>
+
+            <!-- Interactive Overlay Button -->
+            <button id="interactBtn" 
+                onclick="enable3dInteraction()"
+                class="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-amber-900/90 hover:bg-amber-900 text-amber-100 font-semibold px-6 py-2.5 rounded-full shadow-lg transition z-10 text-sm border border-amber-500">
+                <span class="lang-si">3D මාදිලිය නරඹන්න</span>
+                <span class="lang-en">View In 3D</span>
+            </button>
+        </div>
+    </section>
+
     <!-- Dynamic Video Section -->
     <section class="max-w-4xl mx-auto py-12 px-4">
         <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
@@ -394,29 +411,29 @@
                             </div>
                         </div>
                     </a>
-                    <a href="https://maps.app.goo.gl/JUa7TGkPvVnPHmW2A" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
-        <div class="flex items-center gap-4">
-        <div class="social-ring relative flex-shrink-0">
-            <div class="social-icon maps-icon">
-                <i class="fas fa-map-marker-alt"></i>
-            </div>
-        </div>
-        <div class="flex-1 min-w-0">
-            <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">
-                <span class="lang-si">Google Maps</span>
-                <span class="lang-en">Google Maps</span>
-            </p>
-            <p class="text-xs text-slate-500">
-                <span class="lang-si">ස්ථානය සිතියමෙන් බලන්න</span>
-                <span class="lang-en">View Location on Map</span>
-            </p>
-        </div>
-        <div class="text-amber-400 group-hover:text-amber-600 transition">
-            <i class="fas fa-arrow-right text-sm"></i>
-        </div>
-    </div>
-</a>
                     
+                    <a href="https://maps.app.goo.gl/JUa7TGkPvVnPHmW2A" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-ring relative flex-shrink-0">
+                                <div class="social-icon maps-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">
+                                    <span class="lang-si">Google Maps</span>
+                                    <span class="lang-en">Google Maps</span>
+                                </p>
+                                <p class="text-xs text-slate-500">
+                                    <span class="lang-si">ස්ථානය සිතියමෙන් බලන්න</span>
+                                    <span class="lang-en">View Location on Map</span>
+                                </p>
+                            </div>
+                            <div class="text-amber-400 group-hover:text-amber-600 transition">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </a>
 
                 </div>
                 
@@ -546,6 +563,17 @@
             const hiddenCards = document.querySelectorAll('.gallery-extra');
             hiddenCards.forEach(card => card.classList.remove('hidden'));
             document.getElementById('viewMoreContainer').classList.add('hidden');
+        }
+
+        function enable3dInteraction() {
+            const viewer = document.getElementById('stupaViewer');
+            const btn = document.getElementById('interactBtn');
+            if (viewer) {
+                viewer.style.pointerEvents = 'auto';
+            }
+            if (btn) {
+                btn.style.display = 'none';
+            }
         }
 
         async function loadWebsiteData() {
