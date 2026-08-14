@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ශ්‍රී සම්බෝධි විහාරය | Sri Sambodhi Viharaya</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Sinhala-->
+  <!-- Sinhala -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;600;700&display=swap" rel="stylesheet" />
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -15,33 +15,27 @@
     body { font-family: 'Noto Sans Sinhala', sans-serif; }
     .lang-en { display: none; }
 
-    /* slideshow */
-    .hero-slideshow {
+    /* hero video container */
+    .hero-video-wrapper {
       position: absolute;
       inset: 0;
       z-index: 0;
       overflow: hidden;
       border-radius: 0 0 2.5rem 2.5rem;
-      background: rgba(120, 70, 30, 0.2);
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
-      box-shadow: inset 0 0 60px rgba(0,0,0,0.3);
+      background: #1a120e;
     }
-    .hero-slideshow .slide {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center 30%;
-      opacity: 0;
-      transition: opacity 2s ease-in-out;
-      filter: brightness(0.6) saturate(0.7) contrast(1.1);
-      transform: scale(1.02);
+    .hero-video-wrapper video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.75;
+      filter: brightness(0.6) saturate(0.9) contrast(1.05);
+      display: block;
     }
-    .hero-slideshow .slide.active { opacity: 1; }
     .hero-content {
       position: relative;
       z-index: 2;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      text-shadow: 0 4px 20px rgba(0,0,0,0.7);
     }
     .hero-relative {
       position: relative;
@@ -49,7 +43,7 @@
       border-radius: 0 0 2.5rem 2.5rem;
     }
 
-    /* chaithya-top*/
+    /* chaithya-top */
     @keyframes buildUp {
       0% { opacity: 0; transform: translateY(12px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -74,7 +68,7 @@
       transform-origin: 50px 11px;
     }
 
-    /*contact-us cards*/
+    /* contact cards */
     .social-card {
       transition: all 0.3s ease;
       background: rgba(255, 255, 255, 0.95);
@@ -118,7 +112,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ----- lightbox overlay ----- */
+    /* lightbox */
     .lightbox {
       position: fixed;
       inset: 0;
@@ -155,7 +149,6 @@
     }
     .lightbox .close-btn:hover { opacity: 1; }
 
-    /* gallery images become clickable */
     .gallery-img-card {
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -165,7 +158,6 @@
       box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
 
-    /* 3D viewer*/
     #stupaViewer {
       width: 100%;
       height: 500px;
@@ -220,9 +212,15 @@
   </div>
 </nav>
 
-<!--Head slideshow -->
+<!-- Header with video (replaces slideshow) -->
 <header class="hero-relative bg-gradient-to-b from-amber-900/80 to-amber-800/90 text-white py-12 px-4 text-center min-h-[360px] flex items-center">
-  <div id="heroSlideshow" class="hero-slideshow"></div>
+  <div class="hero-video-wrapper">
+    <video autoplay muted loop playsinline>
+      <source src="https://canva.link/rlip96hhisc87rz" type="video/mp4" />
+      <!-- fallback -->
+      Your browser does not support the video tag.
+    </video>
+  </div>
   <div class="hero-content max-w-4xl mx-auto w-full">
     <h2 class="text-3xl md:text-5xl font-extrabold mb-4 text-amber-100 drop-shadow-lg">
       <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ අභිනව චෛත්‍ය රාජයාණන් වහන්සේ ඉදිකිරීමේ මහා පුණ්‍ය කර්මය</span>
@@ -252,7 +250,7 @@
   </div>
 </section>
 
-<!--3D Model-->
+<!-- 3D Model -->
 <section class="max-w-4xl mx-auto my-8 px-4">
   <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-200">
     <model-viewer 
@@ -289,13 +287,13 @@
   </div>
 </section>
 
-<!--fullscreen toggler -->
+<!-- lightbox -->
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
   <span class="close-btn" onclick="closeLightbox()">&times;</span>
   <img id="lightboxImg" src="" alt="Full size" onclick="event.stopPropagation();" />
 </div>
 
-<!-- Bank details -->
+<!-- Bank details & Contact -->
 <section id="contact" class="max-w-4xl mx-auto py-12 px-4 scroll-mt-24">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <div id="donate" class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md scroll-mt-24 flex flex-col items-start justify-between gap-6 overflow-hidden">
@@ -340,7 +338,7 @@
 <script>
   const SHEET_ID = '15qADyrgkH9hIZFn5gyzbxz0fgyKz9v_hzo70FuZS9Ss';
 
-  // ----- helpers -----
+  // helpers
   function normalizeKey(k) { return String(k || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
   function pickField(row, candidates) {
     const nm = {};
@@ -352,7 +350,6 @@
     return '';
   }
 
- 
   function toDirectImageUrl(url) {
     if (!url) return url;
     url = String(url).trim();
@@ -400,7 +397,6 @@
     else { en.forEach(el => el.style.display = 'none'); si.forEach(el => el.style.display = 'inline-block'); currentLang = 'si'; }
   }
 
-  // ----- mobile menu -----
   function toggleMobileMenu() {
     document.getElementById('mobileMenu').classList.toggle('hidden');
     document.getElementById('menuIconOpen').classList.toggle('hidden');
@@ -412,13 +408,11 @@
     document.getElementById('menuIconClose').classList.add('hidden');
   }
 
-  // -view-more btn
   function showAllGalleryImages() {
     document.querySelectorAll('.gallery-extra').forEach(c => c.classList.remove('hidden'));
     document.getElementById('viewMoreContainer').classList.add('hidden');
   }
 
-  // lightbox
   function openLightbox(src) {
     const lb = document.getElementById('lightbox');
     const img = document.getElementById('lightboxImg');
@@ -430,12 +424,10 @@
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
   }
- 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
   });
 
-  // ----- YouTube embed -----
   function getYouTubeEmbedUrl(url) {
     if (!url) return '';
     url = String(url).trim();
@@ -447,11 +439,9 @@
     return vid ? `https://www.youtube.com/embed/${vid}` : '';
   }
 
-  // 3D TOGGLE
   function toggle3DInteraction() {
     const viewer = document.getElementById('stupaViewer');
     const btn = document.getElementById('interactBtn');
-    
     viewer.classList.toggle('interactive');
     const isInteractive = viewer.classList.contains('interactive');
     const siSpan = btn.querySelector('.lang-si');
@@ -464,153 +454,4 @@
     } else {
       siSpan.textContent = '3D මාදිලිය නරඹන්න';
       enSpan.textContent = 'View In 3D';
-      viewer.setAttribute('auto-rotate', '');
-      viewer.style.pointerEvents = 'none';
-    }
-  }
-  // ========== JASMINE PETALS ==========
-  function startJasmineFall() {
-    const container = document.getElementById('petalContainer');
-    if (!container) return;
-    // Jasmine unicode flower + small petals variations
-    const flowers = ['❀', '✿', '❁'];
-    // create 12–18 petals with random positions & delays
-    const count = 14 + Math.floor(Math.random() * 10);
-    for (let i = 0; i < count; i++) {
-      const petal = document.createElement('span');
-      petal.className = 'jasmine';
-      // pick a flower symbol
-      petal.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-      // random horizontal position
-      const left = Math.random() * 95 + 2;
-      petal.style.left = left + '%';
-      // random size (small)
-      const size = 14 + Math.random() * 14;
-      petal.style.fontSize = size + 'px';
-      // random animation duration between 8–14s (fall speed)
-      const duration = 9 + Math.random() * 6;
-      petal.style.animationDuration = duration + 's';
-      // random delay so they don't all start at once (0–2s)
-      const delay = Math.random() * 2;
-      petal.style.animationDelay = delay + 's';
-      // random rotation & slight opacity variation
-      petal.style.opacity = 0.5 + Math.random() * 0.4;
-      container.appendChild(petal);
-    }
-    // remove petals after they finish (to keep DOM clean)
-    setTimeout(() => {
-      container.innerHTML = '';
-    }, 18000); // max duration ~16s + buffer
-  }
-
-  // ========== SLIDESHOW ==========
-  let slideInterval = null;
-  async function loadHeroSlideshow() {
-    let images = [];
-    try {
-      const galleryData = await fetchGoogleSheet('Gallery');
-      if (galleryData && galleryData.length) {
-        images = galleryData
-          .map(item => pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']))
-          .map(url => toDirectImageUrl(url))
-          .filter(url => url && String(url).trim().length > 0);
-      }
-    } catch (e) { console.warn('Slideshow fallback', e); }
-    if (!images.length) images = ['https://placehold.co/1200x400/8B5A2B/FFFFFF?text=ශ්‍රී+සම්බෝධි+විහාරය'];
-
-    const container = document.getElementById('heroSlideshow');
-    container.innerHTML = '';
-    images.forEach((url, idx) => {
-      const div = document.createElement('div');
-      div.className = `slide ${idx === 0 ? 'active' : ''}`;
-      div.style.backgroundImage = `url(${url})`;
-      container.appendChild(div);
-    });
-    if (slideInterval) clearInterval(slideInterval);
-    const slides = container.querySelectorAll('.slide');
-    if (slides.length <= 1) return;
-    let current = 0;
-    slideInterval = setInterval(() => {
-      slides.forEach(s => s.classList.remove('active'));
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    }, 4500);
-  }
-
-  //load data
-  async function loadWebsiteData() {
-    // Progress
-    try {
-      const pd = await fetchGoogleSheet('Progress');
-      if (pd && pd.length) {
-        const row = pd[0];
-        const goal = parseFloat(String(pickField(row, ['Goal', 'Target', 'Total Goal'])).replace(/[^0-9.-]+/g, '')) || 0;
-        const raised = parseFloat(String(pickField(row, ['Raised', 'Collected', 'Raised So Far'])).replace(/[^0-9.-]+/g, '')) || 0;
-        const pct = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
-        const bar = document.getElementById('progressBar');
-        bar.style.width = `${pct}%`;
-        bar.textContent = `${pct}%`;
-        document.getElementById('raisedText').textContent = pickField(row, ['Raised_Formatted', 'Raised Formatted']) || `LKR ${raised.toLocaleString()}`;
-        document.getElementById('goalText').textContent = pickField(row, ['Target_Formatted', 'Goal_Formatted', 'Target Formatted']) || `LKR ${goal.toLocaleString()}`;
-      }
-    } catch (e) { console.warn('Progress error', e); }
-
-    // Videos
-    try {
-      const vd = await fetchGoogleSheet('Videos');
-      const container = document.getElementById('videoContainer');
-      container.innerHTML = '';
-      if (!vd || !vd.length) { container.innerHTML = '<p class="text-center text-slate-500 col-span-2">No videos added yet.</p>'; return; }
-      let added = 0;
-      vd.forEach(item => {
-        const raw = pickField(item, ['URL', 'Link', 'YouTube', 'YouTube Link', 'Video URL', 'Video Link']);
-        const title = pickField(item, ['Title', 'Name']);
-        const embed = getYouTubeEmbedUrl(raw);
-        if (embed) {
-          added++;
-          const card = document.createElement('div');
-          card.className = 'bg-white p-4 rounded-xl shadow-md border border-amber-100';
-          card.innerHTML = `<div class="aspect-video bg-slate-200 rounded-lg overflow-hidden mb-3"><iframe src="${embed}" class="w-full h-full" frameborder="0" allowfullscreen></iframe></div><p class="font-semibold text-amber-900 text-sm">${title || ''}</p>`;
-          container.appendChild(card);
-        }
-      });
-      if (!added) container.innerHTML = '<p class="text-center text-red-500 col-span-2 text-sm">No usable YouTube links found.</p>';
-    } catch (e) { console.warn('Videos error', e); }
-
-    // Gallery 
-    try {
-      const gd = await fetchGoogleSheet('Gallery');
-      const container = document.getElementById('galleryContainer');
-      const viewMore = document.getElementById('viewMoreContainer');
-      container.innerHTML = '';
-      if (!gd || !gd.length) { container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>'; return; }
-      let added = 0;
-      gd.forEach(item => {
-        const rawUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
-        const imgUrl = toDirectImageUrl(rawUrl);
-        const caption = pickField(item, ['Caption', 'Description', 'Title']);
-        if (imgUrl) {
-          added++;
-          const hideClass = added > 3 ? 'hidden gallery-extra' : '';
-          const card = document.createElement('div');
-          card.className = `gallery-img-card bg-white rounded-xl shadow-md overflow-hidden border border-amber-100 ${hideClass}`;
-          card.innerHTML = `
-            <img src="${imgUrl}" alt="${caption || 'Gallery'}" class="w-full h-44 object-cover" 
-                 onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';" 
-                 onclick="openLightbox('${imgUrl}')" />
-            ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
-          `;
-          container.appendChild(card);
-        }
-      });
-      if (added > 3) viewMore.classList.remove('hidden');
-      else viewMore.classList.add('hidden');
-      if (!added) container.innerHTML = '<p class="text-center text-red-500 col-span-3 text-sm">No usable images found.</p>';
-    } catch (e) { console.warn('Gallery error', e); }
-  }
-
-  loadHeroSlideshow();
-  loadWebsiteData();
-</script>
-</body>
-</html>
+      viewer.setAttribute('auto-
