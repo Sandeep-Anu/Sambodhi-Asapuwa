@@ -99,9 +99,37 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Jasmine Flower Animation */
+        @keyframes fallJasmine {
+            0% {
+                transform: translateY(-40px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+        .jasmine-flower {
+            position: fixed;
+            top: -40px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fallJasmine linear forwards;
+        }
     </style>
 </head>
 <body class="bg-amber-50 text-slate-800">
+
+    <!-- Lightbox Modal for Gallery Images -->
+    <div id="imageModal" onclick="closeModal()" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300">
+        <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute -top-10 right-0 text-white text-3xl font-bold hover:text-amber-400 focus:outline-none">&times;</button>
+            <img id="modalImg" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl object-contain border-2 border-amber-200/20" src="" alt="Enlarged View">
+            <p id="modalCaption" class="text-amber-100 text-center mt-3 text-sm md:text-base font-medium px-4"></p>
+        </div>
+    </div>
 
     <!-- Navigation Header -->
    <nav class="bg-amber-900 text-amber-100 sticky top-0 z-50 shadow-md">
@@ -447,8 +475,6 @@
 
         </div>
     </section>
-    
-        
 
     <!-- Footer -->
     <footer class="bg-amber-950 text-amber-200/80 py-6 text-center text-xs">
@@ -456,13 +482,73 @@
             <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ දායක සභාව - 2026</span>
             <span class="lang-en">Donors Association of Sri Sambodhi Vihara - 2026.</span>
         </p>
-        <P> Built by <i><a href="https://lk.linkedin.com/in/anuranga-hettiarachchi-882aa2247?trk=profile-badge">Sandeep Builds</a></i></p>
-      
+        <P> Built by <i><a href="https://lk.linkedin.com/in/anuranga-hettiarachchi-882aa2247?trk=profile-badge">Sandeep🧑🏼‍🔬 </a></i></p>
     </footer>
 
     <!-- Scripts -->
     <script>
         const SHEET_ID = '15qADyrgkH9hIZFn5gyzbxz0fgyKz9v_hzo70FuZS9Ss';
+
+        // Lightbox Functions
+        function openModal(src, caption) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            const modalCaption = document.getElementById('modalCaption');
+            modalImg.src = src;
+            modalCaption.textContent = caption || '';
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Jasmine Flowers Falling Effect (Starts at 10s, disappears after 4s)
+        setTimeout(() => {
+            const flowerContainer = document.createElement('div');
+            flowerContainer.id = 'jasmineContainer';
+            flowerContainer.className = 'fixed inset-0 pointer-events-none z-50 overflow-hidden transition-opacity duration-1000';
+            document.body.appendChild(flowerContainer);
+
+            const flowerCount = 30;
+            const jasmineSvg = `
+                <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow">
+                    <g transform="translate(50,50)">
+                        <circle cx="0" cy="0" r="10" fill="#facc15" />
+                        <ellipse cx="0" cy="-26" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" />
+                        <ellipse cx="25" cy="-8" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" transform="rotate(72)" />
+                        <ellipse cx="15" cy="22" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" transform="rotate(144)" />
+                        <ellipse cx="-15" cy="22" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" transform="rotate(216)" />
+                        <ellipse cx="-25" cy="-8" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" transform="rotate(288)" />
+                    </g>
+                </svg>`;
+
+            for (let i = 0; i < flowerCount; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'jasmine-flower';
+                flower.style.left = Math.random() * 95 + 'vw';
+                const size = Math.random() * 12 + 14; // 14px to 26px
+                flower.style.width = `${size}px`;
+                flower.style.height = `${size}px`;
+                flower.style.animationDuration = `${Math.random() * 1.5 + 2.5}s`;
+                flower.style.animationDelay = `${Math.random() * 1}s`;
+                flower.innerHTML = jasmineSvg;
+                flowerContainer.appendChild(flower);
+            }
+
+            // Start fading out after 3 seconds so it fully vanishes at 4 seconds (14s total)
+            setTimeout(() => {
+                flowerContainer.style.opacity = '0';
+                setTimeout(() => flowerContainer.remove(), 1000);
+            }, 3000);
+        }, 10000);
 
         // 1. Language Switcher
         let currentLang = 'si';
@@ -661,7 +747,9 @@
                             addedCount++;
                             const card = document.createElement('div');
                             const hideClass = addedCount > 3 ? 'hidden gallery-extra' : '';
-                            card.className = `bg-white rounded-xl shadow-md overflow-hidden border border-amber-100 ${hideClass}`;
+                            const safeCaption = (caption || '').replace(/'/g, "\\'");
+                            card.className = `bg-white rounded-xl shadow-md overflow-hidden border border-amber-100 cursor-pointer hover:shadow-xl hover:scale-[1.02] transition duration-300 ${hideClass}`;
+                            card.onclick = () => openModal(imageUrl, caption);
                             card.innerHTML = `
                                 <img src="${imageUrl}" alt="${caption || 'Gallery Photo'}" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
                                 ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
