@@ -99,31 +99,27 @@
                     <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය</span>
                     <span class="lang-en">Sri Sambodhi Viharaya</span>
                 </h1>
-                <!-- Mini Stupa (from Stupa page) -->
-                <svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+              <svg viewBox="0 0 120 180" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
   <defs>
-    <!-- Glow filter for aura -->
+    <!-- Glow filters -->
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="4" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-    <!-- Soft glow for leaves -->
-    <filter id="leafGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="2" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
-    <!-- Gradient for trunk -->
+    <filter id="leafGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <!-- Gradients -->
     <linearGradient id="trunkGrad" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#8B7355" />
       <stop offset="100%" stop-color="#5C4033" />
     </linearGradient>
-    <!-- Gradient for canopy -->
     <radialGradient id="canopyGrad" cx="50%" cy="40%" r="50%">
       <stop offset="0%" stop-color="#2E7D32" />
       <stop offset="60%" stop-color="#1B5E20" />
       <stop offset="100%" stop-color="#0D3B0D" />
     </radialGradient>
-    <!-- Golden accent gradient -->
     <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#FBBF24" />
       <stop offset="100%" stop-color="#B45309" />
@@ -131,143 +127,142 @@
   </defs>
 
   <!-- Background - temple wall texture -->
-  <rect width="200" height="300" fill="#1a1a2e" rx="8" />
+  <rect width="120" height="180" fill="#1a1a2e" rx="6" />
 
   <!-- Temple platform base -->
-  <rect x="20" y="270" width="160" height="20" rx="2" fill="#5C4033" stroke="#8B7355" stroke-width="1" />
-  <rect x="30" y="260" width="140" height="12" rx="2" fill="#6D4C41" stroke="#8B7355" stroke-width="1" />
-  <rect x="40" y="252" width="120" height="10" rx="1" fill="#795548" stroke="#A1887F" stroke-width="1" />
-
-  <!-- Temple pillars (symbolic) -->
-  <rect x="25" y="200" width="6" height="60" fill="#8B7355" opacity="0.4" />
-  <rect x="169" y="200" width="6" height="60" fill="#8B7355" opacity="0.4" />
+  <rect x="10" y="160" width="100" height="12" rx="2" fill="#5C4033" stroke="#8B7355" stroke-width="0.8" />
+  <rect x="18" y="154" width="84" height="8" rx="1.5" fill="#6D4C41" stroke="#8B7355" stroke-width="0.8" />
+  <rect x="26" y="149" width="68" height="6" rx="1" fill="#795548" stroke="#A1887F" stroke-width="0.8" />
 
   <!-- Trunk -->
-  <path d="M 94 255 Q 92 220 90 200 Q 88 180 92 165 Q 96 150 94 135 Q 92 120 96 110" 
-        stroke="url(#trunkGrad)" stroke-width="8" fill="none" stroke-linecap="round" />
-  <path d="M 106 255 Q 108 220 110 200 Q 112 180 108 165 Q 104 150 106 135 Q 108 120 104 110" 
-        stroke="url(#trunkGrad)" stroke-width="7" fill="none" stroke-linecap="round" />
+  <path d="M 56 155 Q 55 135 54 120 Q 53 108 56 98 Q 59 88 57 80" 
+        stroke="url(#trunkGrad)" stroke-width="5" fill="none" stroke-linecap="round" />
+  <path d="M 64 155 Q 65 135 66 120 Q 67 108 64 98 Q 61 88 63 80" 
+        stroke="url(#trunkGrad)" stroke-width="4.5" fill="none" stroke-linecap="round" />
 
   <!-- Main branches -->
-  <g stroke="#6D4C41" stroke-width="4" fill="none" stroke-linecap="round">
+  <g stroke="#6D4C41" stroke-width="2.5" fill="none" stroke-linecap="round">
     <!-- Left branches -->
-    <path d="M 93 170 Q 75 155 55 145" />
-    <path d="M 92 155 Q 70 140 45 125" />
-    <path d="M 91 140 Q 65 125 40 105" />
-    <path d="M 90 125 Q 60 105 35 90" />
+    <path d="M 56 105 Q 45 95 35 88" />
+    <path d="M 55 95 Q 42 85 28 75" />
+    <path d="M 54 85 Q 40 72 25 60" />
     <!-- Right branches -->
-    <path d="M 107 170 Q 125 155 145 145" />
-    <path d="M 108 155 Q 130 140 155 125" />
-    <path d="M 109 140 Q 135 125 160 105" />
-    <path d="M 110 125 Q 140 105 165 90" />
+    <path d="M 64 105 Q 75 95 85 88" />
+    <path d="M 65 95 Q 78 85 92 75" />
+    <path d="M 66 85 Q 80 72 95 60" />
   </g>
 
   <!-- Canopy - layered leaf clusters -->
   <g filter="url(#leafGlow)">
     <!-- Main canopy shape -->
-    <ellipse cx="100" cy="95" rx="55" ry="40" fill="url(#canopyGrad)" opacity="0.85" />
-    <ellipse cx="75" cy="80" rx="35" ry="28" fill="url(#canopyGrad)" opacity="0.75" />
-    <ellipse cx="125" cy="80" rx="35" ry="28" fill="url(#canopyGrad)" opacity="0.75" />
-    <ellipse cx="100" cy="65" rx="40" ry="30" fill="#1B5E20" opacity="0.7" />
+    <ellipse cx="60" cy="72" rx="38" ry="28" fill="url(#canopyGrad)" opacity="0.85" />
+    <ellipse cx="45" cy="62" rx="24" ry="20" fill="url(#canopyGrad)" opacity="0.75" />
+    <ellipse cx="75" cy="62" rx="24" ry="20" fill="url(#canopyGrad)" opacity="0.75" />
+    <ellipse cx="60" cy="50" rx="28" ry="22" fill="#1B5E20" opacity="0.7" />
 
     <!-- Individual heart-shaped leaves -->
-    <!-- Leaf cluster left -->
+    <!-- Left cluster -->
     <g fill="#2E7D32" opacity="0.9">
-      <path d="M 55 140 Q 50 130 55 120 Q 60 130 55 140 Z" />
-      <path d="M 48 130 Q 42 120 48 110 Q 54 120 48 130 Z" />
-      <path d="M 40 115 Q 34 105 40 95 Q 46 105 40 115 Z" />
-      <path d="M 55 125 Q 50 115 55 105 Q 60 115 55 125 Z" />
-      <path d="M 35 100 Q 28 90 35 80 Q 42 90 35 100 Z" />
+      <path d="M 35 85 Q 32 78 35 72 Q 38 78 35 85 Z" />
+      <path d="M 30 77 Q 27 70 30 64 Q 33 70 30 77 Z" />
+      <path d="M 25 68 Q 22 61 25 55 Q 28 61 25 68 Z" />
+      <path d="M 38 78 Q 35 72 38 66 Q 41 72 38 78 Z" />
+      <path d="M 20 60 Q 17 53 20 47 Q 23 53 20 60 Z" />
     </g>
-    <!-- Leaf cluster right -->
+    <!-- Right cluster -->
     <g fill="#1B5E20" opacity="0.9">
-      <path d="M 145 140 Q 150 130 145 120 Q 140 130 145 140 Z" />
-      <path d="M 152 130 Q 158 120 152 110 Q 146 120 152 130 Z" />
-      <path d="M 160 115 Q 166 105 160 95 Q 154 105 160 115 Z" />
-      <path d="M 145 125 Q 150 115 145 105 Q 140 115 145 125 Z" />
-      <path d="M 165 100 Q 172 90 165 80 Q 158 90 165 100 Z" />
+      <path d="M 85 85 Q 88 78 85 72 Q 82 78 85 85 Z" />
+      <path d="M 90 77 Q 93 70 90 64 Q 87 70 90 77 Z" />
+      <path d="M 95 68 Q 98 61 95 55 Q 92 61 95 68 Z" />
+      <path d="M 82 78 Q 85 72 82 66 Q 79 72 82 78 Z" />
+      <path d="M 100 60 Q 103 53 100 47 Q 97 53 100 60 Z" />
     </g>
-    <!-- Leaf cluster top -->
+    <!-- Top cluster -->
     <g fill="#388E3C" opacity="0.85">
-      <path d="M 85 70 Q 80 58 85 48 Q 90 58 85 70 Z" />
-      <path d="M 100 60 Q 95 48 100 38 Q 105 48 100 60 Z" />
-      <path d="M 115 70 Q 120 58 115 48 Q 110 58 115 70 Z" />
-      <path d="M 92 55 Q 87 43 92 33 Q 97 43 92 55 Z" />
-      <path d="M 108 55 Q 113 43 108 33 Q 103 43 108 55 Z" />
-      <path d="M 100 45 Q 95 33 100 23 Q 105 33 100 45 Z" />
+      <path d="M 52 55 Q 49 46 52 38 Q 55 46 52 55 Z" />
+      <path d="M 60 48 Q 57 39 60 31 Q 63 39 60 48 Z" />
+      <path d="M 68 55 Q 71 46 68 38 Q 65 46 68 55 Z" />
+      <path d="M 56 42 Q 53 33 56 25 Q 59 33 56 42 Z" />
+      <path d="M 64 42 Q 67 33 64 25 Q 61 33 64 42 Z" />
+      <path d="M 60 35 Q 57 26 60 18 Q 63 26 60 35 Z" />
     </g>
     <!-- Extra leaf details -->
     <g fill="#4CAF50" opacity="0.6">
-      <path d="M 70 90 Q 65 80 70 72 Q 75 80 70 90 Z" />
-      <path d="M 130 90 Q 135 80 130 72 Q 125 80 130 90 Z" />
-      <path d="M 60 105 Q 55 95 60 87 Q 65 95 60 105 Z" />
-      <path d="M 140 105 Q 145 95 140 87 Q 135 95 140 105 Z" />
+      <path d="M 42 70 Q 39 63 42 57 Q 45 63 42 70 Z" />
+      <path d="M 78 70 Q 81 63 78 57 Q 75 63 78 70 Z" />
+      <path d="M 38 78 Q 35 72 38 66 Q 41 72 38 78 Z" />
+      <path d="M 82 78 Q 85 72 82 66 Q 79 72 82 78 Z" />
     </g>
   </g>
 
-  <!-- Floating golden particles / dust (animation) -->
-  <g fill="#FBBF24" opacity="0.7">
-    <circle cx="45" cy="60" r="1.5">
-      <animate attributeName="cy" values="60;50;60" dur="4s" repeatCount="indefinite" />
-      <animate attributeName="opacity" values="0.7;0.2;0.7" dur="4s" repeatCount="indefinite" />
+  <!-- Floating golden particles (animation) -->
+  <g fill="#FBBF24" opacity="0.8">
+    <circle cx="28" cy="48" r="1.2">
+      <animate attributeName="cy" values="48;40;48" dur="3.5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.8;0.2;0.8" dur="3.5s" repeatCount="indefinite" />
     </circle>
-    <circle cx="155" cy="55" r="1.5">
-      <animate attributeName="cy" values="55;45;55" dur="3.5s" repeatCount="indefinite" />
-      <animate attributeName="opacity" values="0.6;0.1;0.6" dur="3.5s" repeatCount="indefinite" />
+    <circle cx="92" cy="45" r="1.2">
+      <animate attributeName="cy" values="45;37;45" dur="4s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.7;0.15;0.7" dur="4s" repeatCount="indefinite" />
     </circle>
-    <circle cx="70" cy="40" r="1">
-      <animate attributeName="cy" values="40;32;40" dur="5s" repeatCount="indefinite" />
+    <circle cx="42" cy="35" r="0.8">
+      <animate attributeName="cy" values="35;28;35" dur="4.5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.6;0.1;0.6" dur="4.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="78" cy="30" r="0.8">
+      <animate attributeName="cy" values="30;23;30" dur="3.8s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.6;0.15;0.6" dur="3.8s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="35" cy="65" r="1">
+      <animate attributeName="cy" values="65;57;65" dur="4.2s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.7;0.2;0.7" dur="4.2s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="85" cy="60" r="1">
+      <animate attributeName="cy" values="60;52;60" dur="3.6s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3.6s" repeatCount="indefinite" />
+    </circle>
+    <!-- Extra tiny particles -->
+    <circle cx="50" cy="25" r="0.6">
+      <animate attributeName="cy" values="25;18;25" dur="5s" repeatCount="indefinite" />
       <animate attributeName="opacity" values="0.5;0.1;0.5" dur="5s" repeatCount="indefinite" />
     </circle>
-    <circle cx="130" cy="35" r="1">
-      <animate attributeName="cy" values="35;28;35" dur="4.5s" repeatCount="indefinite" />
-      <animate attributeName="opacity" values="0.5;0.15;0.5" dur="4.5s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="55" cy="80" r="1.2">
-      <animate attributeName="cy" values="80;70;80" dur="3.8s" repeatCount="indefinite" />
-      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3.8s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="145" cy="75" r="1.2">
-      <animate attributeName="cy" values="75;65;75" dur="4.2s" repeatCount="indefinite" />
-      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="4.2s" repeatCount="indefinite" />
+    <circle cx="70" cy="22" r="0.6">
+      <animate attributeName="cy" values="22;15;22" dur="4.8s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.5;0.1;0.5" dur="4.8s" repeatCount="indefinite" />
     </circle>
   </g>
 
   <!-- Gentle sway animation for leaves -->
   <g>
-    <animateTransform attributeName="transform" type="rotate" values="-0.5,100,90;0.5,100,90;-0.5,100,90" dur="6s" repeatCount="indefinite" />
-    <!-- Re-draw some leaves inside sway group for subtle movement -->
-    <g fill="#2E7D32" opacity="0.5">
-      <path d="M 55 140 Q 50 130 55 120 Q 60 130 55 140 Z" />
-      <path d="M 145 140 Q 150 130 145 120 Q 140 130 145 140 Z" />
-      <path d="M 85 70 Q 80 58 85 48 Q 90 58 85 70 Z" />
-      <path d="M 115 70 Q 120 58 115 48 Q 110 58 115 70 Z" />
+    <animateTransform attributeName="transform" type="rotate" values="-0.5,60,70;0.5,60,70;-0.5,60,70" dur="6s" repeatCount="indefinite" />
+    <g fill="#2E7D32" opacity="0.4">
+      <path d="M 35 85 Q 32 78 35 72 Q 38 78 35 85 Z" />
+      <path d="M 85 85 Q 88 78 85 72 Q 82 78 85 85 Z" />
+      <path d="M 52 55 Q 49 46 52 38 Q 55 46 52 55 Z" />
+      <path d="M 68 55 Q 71 46 68 38 Q 65 46 68 55 Z" />
     </g>
   </g>
 
   <!-- Temple bell / decoration at bottom -->
-  <g transform="translate(100, 275)">
-    <line x1="0" y1="-8" x2="0" y2="0" stroke="#FBBF24" stroke-width="1.5" />
-    <path d="M -6 0 Q 0 8 6 0 Z" fill="none" stroke="#FBBF24" stroke-width="1.5" />
-    <circle cx="0" cy="2" r="1.5" fill="#FBBF24" />
+  <g transform="translate(60, 163)">
+    <line x1="0" y1="-6" x2="0" y2="0" stroke="#FBBF24" stroke-width="1.2" />
+    <path d="M -4 0 Q 0 6 4 0 Z" fill="none" stroke="#FBBF24" stroke-width="1.2" />
+    <circle cx="0" cy="1.5" r="1" fill="#FBBF24" />
   </g>
 
   <!-- Auspicious symbols - small lotus base -->
-  <g transform="translate(100, 250)" opacity="0.6">
-    <path d="M -8 0 Q -4 -6 0 0 Q 4 -6 8 0" fill="none" stroke="#FBBF24" stroke-width="1" />
-    <path d="M -6 3 Q -3 -3 0 3 Q 3 -3 6 3" fill="none" stroke="#FBBF24" stroke-width="1" />
+  <g transform="translate(60, 148)" opacity="0.6">
+    <path d="M -6 0 Q -3 -4 0 0 Q 3 -4 6 0" fill="none" stroke="#FBBF24" stroke-width="0.8" />
+    <path d="M -4 2 Q -2 -2 0 2 Q 2 -2 4 2" fill="none" stroke="#FBBF24" stroke-width="0.8" />
   </g>
 
   <!-- Subtle pulsing aura behind tree -->
-  <ellipse cx="100" cy="110" rx="70" ry="55" fill="none" stroke="#FBBF24" stroke-width="0.5" opacity="0.3">
-    <animate attributeName="rx" values="70;75;70" dur="4s" repeatCount="indefinite" />
-    <animate attributeName="ry" values="55;60;55" dur="4s" repeatCount="indefinite" />
+  <ellipse cx="60" cy="80" rx="45" ry="38" fill="none" stroke="#FBBF24" stroke-width="0.5" opacity="0.3">
+    <animate attributeName="rx" values="45;48;45" dur="4s" repeatCount="indefinite" />
+    <animate attributeName="ry" values="38;42;38" dur="4s" repeatCount="indefinite" />
     <animate attributeName="opacity" values="0.3;0.15;0.3" dur="4s" repeatCount="indefinite" />
   </ellipse>
-</svg>
-            </div>
-
-            <!-- Desktop Nav -->
+</svg>            <!-- Desktop Nav -->
             <div class="hidden md:flex items-center gap-6">
                 <a href="#events" class="font-medium hover:text-amber-300 transition">
                     <span class="lang-si">විහාරස්ථ පින්කම්</span>
