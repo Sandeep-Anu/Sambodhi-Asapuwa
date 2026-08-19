@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ශ්‍රී සම්බෝධි විහාරය| Sri Sambodhi Viharaya</title>
+    <!-- Tailwind CSS for Layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <!-- Sinhala Web Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans Sinhala', sans-serif; }
+        .lang-en { display: none; }
+        
+        /* Stupa Animation Keyframes */
+        @keyframes buildUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 2px #fde047) drop-shadow(0 0 5px #fbbf24); 
+                transform: scale(1); 
+            }
+            50% { 
+                filter: drop-shadow(0 0 8px #fef08a) drop-shadow(0 0 15px #fde047) drop-shadow(0 0 25px #eab308); 
+                transform: scale(1.4); 
+            }
+        }
+        
+        /* Stupa Parts Setup */
+        .stupa-part {
+            opacity: 0;
+            animation: buildUp 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        /* Sequential Delays */
+        .stupa-base-1 { animation-delay: 0.2s; }
+        .stupa-base-2 { animation-delay: 0.6s; }
+        .stupa-base-3 { animation-delay: 1.0s; }
+        .stupa-dome   { animation-delay: 1.5s; }
+        .stupa-harmika{ animation-delay: 2.1s; }
+        .stupa-spire  { animation-delay: 2.7s; }
+        .stupa-pin    {
+            animation: buildUp 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) 3.3s, 
+                       pulseGlow 2.5s infinite ease-in-out 4.0s;
+            transform-origin: 50px 11px;
+        }
+
+        /* Social Card Hover Effects */
+        .social-card {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        .social-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border-color: #fbbf24;
+        }
+        .social-icon {
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            font-size: 24px;
+            color: white;
+        }
+        .whatsapp-icon { background: #25D366; }
+        .facebook-icon { background: #1877F2; }
+        .phone-icon { background: #f59e0b; }
+        .social-card:hover .social-icon { transform: scale(1.15) rotate(-5deg); }
+
+        /* Glowing ring effect */
+        .social-ring {
+            position: relative;
+        }
+        .social-ring::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent, transparent, transparent, transparent);
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+        .social-card:hover .social-ring::before {
+            background: conic-gradient(from 45deg, #fbbf24, #f59e0b, #fbbf24, #f59e0b);
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Jasmine Flower Animation */
+        @keyframes fallJasmine {
+            0% {
+                transform: translateY(-40px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+        .jasmine-flower {
+            position: fixed;
+            top: -40px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fallJasmine linear forwards;
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-slate-800">
+
+    <!-- Lightbox Modal for Gallery Images -->
+    <div id="imageModal" onclick="closeModal()" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300">
+        <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute -top-10 right-0 text-white text-3xl font-bold hover:text-amber-400 focus:outline-none">&times;</button>
+            <img id="modalImg" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl object-contain border-2 border-amber-200/20" src="" alt="Enlarged View">
+            <p id="modalCaption" class="text-amber-100 text-center mt-3 text-sm md:text-base font-medium px-4"></p>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+   <nav class="bg-amber-900 text-amber-100 sticky top-0 z-50 shadow-md">
+        <div class="max-w-5xl mx-auto flex justify-between items-center p-4">
+            
+            <!-- Flex Container to hold Title and Small Stupa together -->
+            <div class="flex items-center gap-3">
+                <h1 class="font-bold text-lg md:text-xl">
+                    <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය</span>
+                    <span class="lang-en">Sri Sambodhi Viharaya</span>
+                </h1>
+                
+                <!-- Title Bar Mini Stupa Animation -->
+                <div class="w-10 h-10 flex-shrink-0">
+                    <svg viewBox="0 0 100 100" class="w-full h-full overflow-visible">
+                        <!-- Base 1 -->
+                        <rect x="10" y="85" width="80" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-1" />
+                        <!-- Base 2 -->
+                        <rect x="18" y="79" width="64" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-2" />
+                        <!-- Base 3 -->
+                        <rect x="26" y="73" width="48" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-base-3" />
+                        <!-- Dome (Anda) -->
+                        <path d="M 28 73 A 22 22 0 0 1 72 73 Z" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-dome" />
+                        <!-- Harmika -->
+                        <rect x="43" y="43" width="14" height="8" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" class="stupa-part stupa-harmika" />
+                        <!-- Spire (Koth Kerella) -->
+                        <polygon points="44,43 56,43 51,15 49,15" fill="#fbbf24" stroke="#b45309" stroke-width="1" class="stupa-part stupa-spire" />
+                        <!-- Pinnacle (Chudamanikya) -->
+                        <circle cx="50" cy="11" r="3.5" fill="#ef4444" stroke="#7f1d1d" stroke-width="1" class="stupa-part stupa-pin" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#gallery" class="font-medium hover:text-amber-300 transition">
+                    <span class="lang-si">ඡායාරූප එකතුව</span>
+                    <span class="lang-en">Gallery</span>
+                </a>
+                <a href="#contact" class="font-medium hover:text-amber-300 transition">
+                    <span class="lang-si">අමතන්න</span>
+                    <span class="lang-en">Contact Us</span>
+                </a>
+                <a href="#donate" class="bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-1.5 rounded-full transition">
+                    <span class="lang-si">දායක වන්න</span>
+                    <span class="lang-en">Donate Now</span>
+                </a>
+                <!-- Language Toggle Switch -->
+                <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500 transition">
+                    <span class="lang-si">English Version</span>
+                    <span class="lang-en">සිංහල පිටුව</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="md:hidden p-1.5 -mr-1.5" aria-label="Menu">
+                <svg id="menuIconOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg id="menuIconClose" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Links -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-amber-700 px-4 pb-4 pt-2 space-y-2">
+            <a href="#gallery" onclick="closeMobileMenu()" class="block py-2 font-medium hover:text-amber-300">
+                <span class="lang-si">ඡායාරූප එකතුව</span>
+                <span class="lang-en">Gallery</span>
+            </a>
+            <a href="#contact" onclick="closeMobileMenu()" class="block py-2 font-medium hover:text-amber-300">
+                <span class="lang-si">අමතන්න</span>
+                <span class="lang-en">Contact Us</span>
+            </a>
+            <a href="#donate" onclick="closeMobileMenu()" class="block text-center bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-2 rounded-lg">
+                <span class="lang-si">දායක වන්න</span>
+                <span class="lang-en">Donate Now</span>
+            </a>
+            <button onclick="toggleLanguage()" class="w-full bg-amber-700 hover:bg-amber-600 px-3 py-2 rounded-lg text-sm font-semibold border border-amber-500 transition">
+                <span class="lang-si">English Version</span>
+                <span class="lang-en">සිංහල පිටුව</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Banner with Video Background -->
+    <header class="relative bg-amber-950 text-white py-16 md:py-24 px-4 text-center overflow-hidden">
+        <!-- Background Video -->
+        <video 
+            autoplay 
+            loop 
+            muted 
+            playsinline 
+            class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none">
+            <source src="https://sandeep-anu.github.io/Sambodhi-Asapuwa/images/Untitled%20design%20(1).mp4" type="video/mp4">
+            Your browser does not support video playback.
+        </video>
+
+        <!-- Dark/Amber Overlay for readability -->
+        <div class="absolute inset-0 bg-amber-950/75 z-0"></div>
+
+        <!-- Header Content -->
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-4 text-amber-200">
+                <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ අභිනව චෛත්‍ය රාජයාණන් වහන්සේ ඉදිකිරීමේ මහා පුණ්‍ය කර්මය</span>
+                <span class="lang-en">The great meritorious undertaking of constructing the new Chaitya at Sri Sambodhi Vihara.</span>
+            </h2>
+            <p class="text-base md:text-lg text-amber-100 mb-6 max-w-2xl mx-auto">
+                <span class="lang-si">අතිපූජනීය මහා සංඝරත්නයේ අනුශාසනා පරිදි සිදුකෙරෙන මෙම පූජනීය මහ සෑ රාජයාණන් වහන්සේ ඉදිකිරීමේ පින්කම උදෙසා ඔබත් මුදලින් හෝ ද්‍රව්‍යයෙන් දායකවන්න.</span>
+                <span class="lang-en">Join hands with us to build a sacred stupa under the guidance of our venerable Mahasangha for future generations.</span>
+            </p>
+        </div>
+    </header>
+
+    <!-- Dynamic Graphical Progress Tracker -->
+    <section class="max-w-4xl mx-auto -mt-6 px-4">
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-amber-200 relative z-20">
+            <h3 class="text-xl font-bold text-amber-900 mb-4 text-center">
+                <span class="lang-si">අරමුදල් ප්‍රගතිය</span>
+                <span class="lang-en">Fundraising Progress</span>
+            </h3>
+
+            <!-- Dynamic Progress Bar -->
+            <div class="w-full bg-slate-200 rounded-full h-6 mb-4 overflow-hidden">
+                <div id="progressBar" class="bg-amber-500 h-6 rounded-full text-xs font-bold text-amber-950 text-center leading-6 transition-all duration-500" style="width: 0%;">
+                    0%
+                </div>
+            </div>
+
+            <div class="flex justify-between text-sm md:text-base font-semibold text-slate-700">
+                <div>
+                    <span class="block text-slate-500 text-xs">
+                        <span class="lang-si">ලැබී ඇති මුදල</span>
+                        <span class="lang-en">Raised So Far</span>
+                    </span>
+                    <span id="raisedText" class="text-amber-800 font-bold">LKR 0</span>
+                </div>
+                <div class="text-right">
+                    <span class="block text-slate-500 text-xs">
+                        <span class="lang-si">අපේක්ෂිත මුදල</span>
+                        <span class="lang-en">Total Goal</span>
+                    </span>
+                    <span id="goalText" class="text-slate-800">LKR 0</span>
+                </div>
+            </div>
+            <p id="progressError" class="text-center text-red-500 text-xs mt-3 hidden"></p>
+        </div>
+    </section>
+
+    <!-- 3D Model Display Section -->
+    <section class="max-w-4xl mx-auto my-8 px-4">
+        <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-200">
+            <model-viewer 
+                id="stupaViewer"
+                src="https://sandeep-anu.github.io/Sambodhi-Asapuwa/images/tempimg.glb" 
+                alt="3D Stupa Model" 
+                auto-rotate 
+                shadow-intensity="1" 
+                style="width: 100%; height: 500px; background-color: #f5f5f5;pointer-events: none;">
+            </model-viewer>
+
+            <!-- Interactive Overlay Button -->
+            <button id="interactBtn" 
+                onclick="enable3dInteraction()"
+                class="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-amber-900/90 hover:bg-amber-900 text-amber-100 font-semibold px-6 py-2.5 rounded-full shadow-lg transition z-10 text-sm border border-amber-500">
+                <span class="lang-si">3D මාදිලිය</span>
+                <span class="lang-en">3D View</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Dynamic Video Section -->
+    <section class="max-w-4xl mx-auto py-12 px-4">
+        <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
+            <span class="lang-si">ගෞරවනීය ස්වාමීන් වහන්සේලාගේ අනුශාසනා</span>
+            <span class="lang-en">Dhamma Advices & Blessings From Venerable Monks </span>
+        </h3>
+        <div id="videoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <p class="text-center text-slate-500 col-span-2">Loading videos...</p>
+        </div>
+    </section>
+
+    <!-- Dynamic Photo Gallery -->
+    <section id="gallery" class="bg-amber-100/50 py-12 px-4 scroll-mt-24">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
+                <span class="lang-si">ඡායාරූප එකතුව</span>
+                <span class="lang-en">Gallery</span>
+            </h3>
+            <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <p class="text-center text-slate-500 col-span-3">Loading photos...</p>
+            </div>
+            
+            <!-- View More Button Container -->
+            <div id="viewMoreContainer" class="text-center mt-8 hidden">
+                <button onclick="showAllGalleryImages()" class="bg-amber-800 hover:bg-amber-900 text-amber-50 font-semibold px-6 py-2.5 rounded-full transition shadow-md border border-amber-700">
+                    <span class="lang-si">තවත් බලන්න</span>
+                    <span class="lang-en">View More</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bank Details & Enhanced Contact Section -->
+    <section id="contact" class="max-w-4xl mx-auto py-12 px-4 scroll-mt-24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- Official Bank Account Details -->
+            <div id="donate" class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md scroll-mt-24 flex flex-col items-start justify-between gap-6 overflow-hidden">
+                
+                <!-- Details Section -->
+                <div class="flex-1 w-full text-left">
+                    <h3 class="text-xl font-bold text-amber-200 mb-4">
+                        <span class="lang-si">ගිණුම් තොරතුරු</span>
+                        <span class="lang-en">Bank Account Details</span>
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <p><strong><span class="lang-si">ගිණුමේ නම:</span><span class="lang-en">Account Name:</span></strong><br> Sri Sambodhi Viharastha Karya Sadaka Samithiya</p>
+                        <p><strong><span class="lang-si">බැංකුව:</span><span class="lang-en">Bank:</span></strong><br> Hatton National Bank (HNB) </p>
+                        <p><strong><span class="lang-si">ශාඛාව:</span><span class="lang-en">Branch:</span></strong><br> Ragama Branch</p>
+                        <p><strong><span class="lang-si">ගිණුම් අංකය:</span><span class="lang-en">Account Number:</span></strong><br> <span class="text-lg font-mono text-amber-300">102020383865</span></p>
+                         <a href="https://forms.gle/X8Z1CbhhhyHLJqQi6" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-2 mt-4 rounded-full transition">
+                            <span class="lang-si">ගෙවීම් පත්‍රිකාව උඩුගත කරන්න</span>
+                            <span class="lang-en">Upload Payslip</span>
+                        </a>
+                    </div>
+                </div>                
+            </div>
+             
+            <!-- Modern Contact / Social Connect Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-200">
+                <h3 class="text-xl font-bold text-amber-900 mb-4">
+                    <span class="lang-si">අප හා සම්බන්ධ වන්න</span>
+                    <span class="lang-en">Connect With Us</span>
+                </h3>
+                <p class="text-slate-600 text-sm mb-6">
+                    <span class="lang-si">ඔබගේ අදහස් හෝ දායකත්වය සම්බන්ධයෙන් අප හා සම්බන්ධ වන්න.</span>
+                    <span class="lang-en">Reach out to us for any questions, feedback, or donations.</span>
+                </p>
+                
+                <!-- Social & Contact Cards Grid -->
+                <div class="grid grid-cols-1 gap-4">
+                    
+                    <!-- WhatsApp Card -->
+                    <a href="https://wa.me/94716100566" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-ring relative flex-shrink-0">
+                                <div class="social-icon whatsapp-icon">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">WhatsApp</p>
+                                <p class="text-xs text-slate-500">
+                                    <span class="lang-si">පණිවිඩ යොමු කරන්න</span>
+                                    <span class="lang-en">Send a Message</span>
+                                </p>
+                            </div>
+                            <div class="text-amber-400 group-hover:text-amber-600 transition">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Facebook Page Card -->
+                    <a href="https://www.facebook.com/yourpage" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-ring relative flex-shrink-0">
+                                <div class="social-icon facebook-icon">
+                                    <i class="fab fa-facebook-f"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">Facebook</p>
+                                <p class="text-xs text-slate-500">
+                                    <span class="lang-si">අපගේ Facebook පිටුවට පිවිසෙන්න</span>
+                                    <span class="lang-en">Visit Our Facebook Page</span>
+                                </p>
+                            </div>
+                            <div class="text-amber-400 group-hover:text-amber-600 transition">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Phone Call Card -->
+                    <a href="tel:+94112920240" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-ring relative flex-shrink-0">
+                                <div class="social-icon phone-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">
+                                    <span class="lang-si">දුරකථන අමතුම</span>
+                                    <span class="lang-en">Call Us Now</span>
+                                </p>
+                                <p class="text-xs text-slate-500">
+                                    <span class="lang-si">අමතන්න</span>
+                                    <span class="lang-en">Direct Phone Call</span>
+                                </p>
+                            </div>
+                            <div class="text-amber-400 group-hover:text-amber-600 transition">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="https://maps.app.goo.gl/JUa7TGkPvVnPHmW2A" target="_blank" rel="noopener noreferrer" class="social-card group block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-ring relative flex-shrink-0">
+                                <div class="social-icon maps-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-amber-900 transition">
+                                    <span class="lang-si">Google Maps</span>
+                                    <span class="lang-en">Google Maps</span>
+                                </p>
+                                <p class="text-xs text-slate-500">
+                                    <span class="lang-si">Google සිතියම </span>
+                                    <span class="lang-en">View Location on Map</span>
+                                </p>
+                            </div>
+                            <div class="text-amber-400 group-hover:text-amber-600 transition">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-amber-100 text-center">
+                    <p class="text-xs text-slate-400">
+                        <span class="lang-si">සමාජ මාධ්‍ය හරහා අප හා සම්බන්ධ වන්න</span>
+                        <span class="lang-en">Follow us on social media </span>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-amber-950 text-amber-200/80 py-6 text-center text-xs">
+        <p>
+            <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ දායක සභාව - 2026</span>
+            <span class="lang-en">Donors Association of Sri Sambodhi Vihara - 2026.</span>
+        </p>
+        <P> Built by <i><a href="https://lk.linkedin.com/in/anuranga-hettiarachchi-882aa2247?trk=profile-badge">Sandeep🧑🏼‍🔬 </a></i></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        const SHEET_ID = '15qADyrgkH9hIZFn5gyzbxz0fgyKz9v_hzo70FuZS9Ss';
+
+        // Lightbox Functions
+        function openModal(src, caption) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            const modalCaption = document.getElementById('modalCaption');
+            modalImg.src = src;
+            modalCaption.textContent = caption || '';
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Jasmine Flowers Falling Effect (Starts at 10s, disappears after 4s)
+        setTimeout(() => {
+            const flowerContainer = document.createElement('div');
+            flowerContainer.id = 'jasmineContainer';
+            flowerContainer.className = 'fixed inset-0 pointer-events-none z-50 overflow-hidden transition-opacity duration-1000';
+            document.body.appendChild(flowerContainer);
+
+            const flowerCount = 30;
+            const jasmineSvg = `
+                <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow">
+                    <g transform="translate(50,50)">
+                        <circle cx="0" cy="0" r="10" fill="#facc15" />
+                        <ellipse cx="0" cy="-26" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" />
+                        <ellipse cx="25" cy="-8" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" transform="rotate(72)" />
+                        <ellipse cx="15" cy="22" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" transform="rotate(144)" />
+                        <ellipse cx="-15" cy="22" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" transform="rotate(216)" />
+                        <ellipse cx="-25" cy="-8" rx="9" ry="18" fill="#ffffff" stroke="#fde047" stroke-width="0.8" transform="rotate(288)" />
+                    </g>
+                </svg>`;
+
+            for (let i = 0; i < flowerCount; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'jasmine-flower';
+                flower.style.left = Math.random() * 95 + 'vw';
+                const size = Math.random() * 12 + 14; // 14px to 26px
+                flower.style.width = `${size}px`;
+                flower.style.height = `${size}px`;
+                flower.style.animationDuration = `${Math.random() * 1.5 + 2.5}s`;
+                flower.style.animationDelay = `${Math.random() * 1}s`;
+                flower.innerHTML = jasmineSvg;
+                flowerContainer.appendChild(flower);
+            }
+
+            // Start fading out after 3 seconds so it fully vanishes at 4 seconds (14s total)
+            setTimeout(() => {
+                flowerContainer.style.opacity = '0';
+                setTimeout(() => flowerContainer.remove(), 1000);
+            }, 3000);
+        }, 10000);
+
+        // 1. Language Switcher
+        let currentLang = 'si';
+        function toggleLanguage() {
+            const siElements = document.querySelectorAll('.lang-si');
+            const enElements = document.querySelectorAll('.lang-en');
+
+            if (currentLang === 'si') {
+                siElements.forEach(el => el.style.display = 'none');
+                enElements.forEach(el => el.style.display = 'inline-block');
+                currentLang = 'en';
+            } else {
+                enElements.forEach(el => el.style.display = 'none');
+                siElements.forEach(el => el.style.display = 'inline-block');
+                currentLang = 'si';
+            }
+        }
+
+        function normalizeKey(k) {
+            return String(k || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+
+        function pickField(row, candidates) {
+            const normalizedMap = {};
+            Object.keys(row).forEach(k => {
+                normalizedMap[normalizeKey(k)] = row[k];
+            });
+            for (const c of candidates) {
+                const nk = normalizeKey(c);
+                if (normalizedMap[nk] !== undefined && String(normalizedMap[nk]).trim() !== '') {
+                    return normalizedMap[nk];
+                }
+            }
+            return '';
+        }
+
+        async function fetchGoogleSheet(tabName) {
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(tabName)}`;
+            const res = await fetch(url);
+            const text = await res.text();
+
+            const jsonStart = text.indexOf('{');
+            const jsonEnd = text.lastIndexOf('}');
+            if (jsonStart === -1 || jsonEnd === -1) {
+                throw new Error(`Sheet tab "${tabName}" returned an unexpected response. Check the tab name and sharing settings.`);
+            }
+            const json = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
+
+            if (json.status === 'error') {
+                const reason = (json.errors && json.errors[0] && json.errors[0].detailed_message) || 'Unknown error';
+                throw new Error(`Sheet tab "${tabName}" error: ${reason}`);
+            }
+            if (!json.table) {
+                throw new Error(`Sheet tab "${tabName}" has no table data. Check the tab name is exactly right (case-sensitive).`);
+            }
+
+            const cols = json.table.cols.map(c => (c.label || '').trim());
+            return (json.table.rows || []).map(r => {
+                let obj = {};
+                (r && r.c ? r.c : []).forEach((cell, idx) => {
+                    const key = cols[idx];
+                    if (key) {
+                        if (cell) {
+                            obj[key] = cell.f !== undefined && cell.f !== null ? cell.f : (cell.v !== null ? cell.v : '');
+                        } else {
+                            obj[key] = '';
+                        }
+                    }
+                });
+                return obj;
+            });
+        }
+
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return '';
+            url = String(url).trim();
+            let videoId = '';
+            if (url.includes('embed/')) {
+                return url;
+            } else if (url.includes('shorts/')) {
+                videoId = url.split('shorts/')[1].split('?')[0].split('&')[0];
+            } else if (url.includes('v=')) {
+                videoId = url.split('v=')[1].split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+            document.getElementById('menuIconOpen').classList.toggle('hidden');
+            document.getElementById('menuIconClose').classList.toggle('hidden');
+        }
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.add('hidden');
+            document.getElementById('menuIconOpen').classList.remove('hidden');
+            document.getElementById('menuIconClose').classList.add('hidden');
+        }
+
+        function showAllGalleryImages() {
+            const hiddenCards = document.querySelectorAll('.gallery-extra');
+            hiddenCards.forEach(card => card.classList.remove('hidden'));
+            document.getElementById('viewMoreContainer').classList.add('hidden');
+        }
+
+        function enable3dInteraction() {
+            const viewer = document.getElementById('stupaViewer');
+            const btn = document.getElementById('interactBtn');
+            if (viewer) {
+                viewer.style.pointerEvents = 'auto';
+            }
+            if (btn) {
+                btn.style.display = 'none';
+            }
+        }
+
+        async function loadWebsiteData() {
+            try {
+                const progressData = await fetchGoogleSheet('Progress');
+                if (progressData && progressData.length > 0) {
+                    const row = progressData[0];
+                    const goal = parseFloat(String(pickField(row, ['Goal', 'Target', 'Total Goal'])).replace(/[^0-9.-]+/g, '')) || 0;
+                    const raised = parseFloat(String(pickField(row, ['Raised', 'Collected', 'Raised So Far'])).replace(/[^0-9.-]+/g, '')) || 0;
+                    const percentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
+
+                    const bar = document.getElementById('progressBar');
+                    bar.style.width = `${percentage}%`;
+                    bar.textContent = `${percentage}%`;
+
+                    const raisedFormatted = pickField(row, ['Raised_Formatted', 'Raised Formatted']);
+                    const targetFormatted = pickField(row, ['Target_Formatted', 'Goal_Formatted', 'Target Formatted']);
+                    document.getElementById('raisedText').textContent = raisedFormatted || `LKR ${raised.toLocaleString()}`;
+                    document.getElementById('goalText').textContent = targetFormatted || `LKR ${goal.toLocaleString()}`;
+                } else {
+                    console.warn('Progress tab returned no rows.');
+                }
+            } catch (err) {
+                console.error('Error loading progress:', err);
+                const errEl = document.getElementById('progressError');
+                errEl.textContent = currentLang === 'si'
+                    ? 'ප්‍රගති දත්ත පූරණය කිරීමේ දෝෂයක් - Console එක පරීක්ෂා කරන්න.'
+                    : `Couldn't load progress data (${err.message})`;
+                errEl.classList.remove('hidden');
+            }
+
+            try {
+                const videoData = await fetchGoogleSheet('Videos');
+                const container = document.getElementById('videoContainer');
+                container.innerHTML = '';
+                if (!videoData || videoData.length === 0) {
+                    container.innerHTML = '<p class="text-center text-slate-500 col-span-2">No videos added yet.</p>';
+                } else {
+                    let addedCount = 0;
+                    videoData.forEach(item => {
+                        const rawUrl = pickField(item, ['URL', 'Link', 'YouTube', 'YouTube Link', 'Video URL', 'Video Link']);
+                        const title = pickField(item, ['Title', 'Name']);
+                        const embedUrl = getYouTubeEmbedUrl(rawUrl);
+                        if (embedUrl) {
+                            addedCount++;
+                            const card = document.createElement('div');
+                            card.className = 'bg-white p-4 rounded-xl shadow-md border border-amber-100';
+                            card.innerHTML = `
+                                <div class="aspect-video bg-slate-200 rounded-lg overflow-hidden mb-3">
+                                    <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                                </div>
+                                <p class="font-semibold text-amber-900 text-sm">${title || ''}</p>
+                            `;
+                            container.appendChild(card);
+                        } else {
+                            console.warn('Skipped a video row - no recognizable YouTube URL. Raw row from sheet:', item);
+                        }
+                    });
+                    if (addedCount === 0) {
+                        container.innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">${videoData.length} row(s) found in "Videos" tab, but none had a usable YouTube link. Open the browser console for details on each row's actual column names.</p>`;
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading videos:', err);
+                document.getElementById('videoContainer').innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">Couldn't load videos (${err.message})</p>`;
+            }
+
+            try {
+                const galleryData = await fetchGoogleSheet('Gallery');
+                const container = document.getElementById('galleryContainer');
+                const viewMoreContainer = document.getElementById('viewMoreContainer');
+                container.innerHTML = '';
+                if (!galleryData || galleryData.length === 0) {
+                    container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>';
+                } else {
+                    let addedCount = 0;
+                    galleryData.forEach(item => {
+                        const imageUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
+                        const caption = pickField(item, ['Caption', 'Description', 'Title']);
+                        if (imageUrl) {
+                            addedCount++;
+                            const card = document.createElement('div');
+                            const hideClass = addedCount > 3 ? 'hidden gallery-extra' : '';
+                            const safeCaption = (caption || '').replace(/'/g, "\\'");
+                            card.className = `bg-white rounded-xl shadow-md overflow-hidden border border-amber-100 cursor-pointer hover:shadow-xl hover:scale-[1.02] transition duration-300 ${hideClass}`;
+                            card.onclick = () => openModal(imageUrl, caption);
+                            card.innerHTML = `
+                                <img src="${imageUrl}" alt="${caption || 'Gallery Photo'}" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
+                                ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
+                            `;
+                            container.appendChild(card);
+                        } else {
+                            console.warn('Skipped a gallery row - no image URL found. Raw row from sheet:', item);
+                        }
+                    });
+
+                    if (addedCount > 3) {
+                        viewMoreContainer.classList.remove('hidden');
+                    } else {
+                        viewMoreContainer.classList.add('hidden');
+                    }
+
+                    if (addedCount === 0) {
+                        container.innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">${galleryData.length} row(s) found in "Gallery" tab, but none had a usable image link. Open the browser console for details on each row's actual column names.</p>`;
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading gallery:', err);
+                document.getElementById('galleryContainer').innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">Couldn't load photos (${err.message})</p>`;
+            }
+        }
+
+        loadWebsiteData();
+    </script>
+</body>
+</html>
