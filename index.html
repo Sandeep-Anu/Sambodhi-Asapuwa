@@ -15,7 +15,7 @@
         body { font-family: 'Noto Sans Sinhala', sans-serif; }
         .lang-en { display: none; }
 
-        /* Social Card Styling */
+        /* Social Card Styling (matches Stupa page) */
         .social-card {
             transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.95);
@@ -23,51 +23,96 @@
             border: 1px solid rgba(251, 191, 36, 0.2);
         }
         .social-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
             border-color: #fbbf24;
         }
         .social-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            font-size: 20px;
+            font-size: 24px;
             color: white;
+            transition: transform 0.3s ease;
         }
+        .social-card:hover .social-icon { transform: scale(1.15) rotate(-5deg); }
         .whatsapp-icon { background: #25D366; }
         .facebook-icon { background: #1877F2; }
         .phone-icon { background: #f59e0b; }
         .maps-icon { background: #ea4335; }
+
+        /* Jasmine Flower Animation (same as Stupa page) */
+        @keyframes fallJasmine {
+            0% {
+                transform: translateY(-40px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+        .jasmine-flower {
+            position: fixed;
+            top: -40px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fallJasmine linear forwards;
+        }
+
+        /* Slideshow styles */
+        .slide-fade {
+            animation: fade 1.5s ease-in-out;
+        }
+        @keyframes fade {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body class="bg-amber-50 text-slate-800">
 
-    <!-- Top Announcement Banner for Stupa Funding -->
+    <!-- Jasmine Flowers (same effect as Stupa donation page) -->
+    <div id="jasmineContainer" class="fixed inset-0 pointer-events-none z-50 overflow-hidden opacity-0 transition-opacity duration-1000"></div>
+
+    <!-- Top Announcement Banner -->
     <div class="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-amber-950 px-4 py-3 shadow-md border-b border-amber-400">
         <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
             <div class="flex items-center gap-2 font-semibold text-sm sm:text-base">
                 <p class="text-base md:text-lg text-amber-100 max-w-2xl mx-auto">
-                <span class="lang-si">විහාරස්ථ සියලුම ශාසනික සේවාවන් සහ පින්කම් තොරතුරු මෙතැනින් ලබාගන්න.</span>
-                <span class="lang-en"> Find details about all religious events, services, and temple activities here.</span>
-            </p>
+                    <span class="lang-si">විහාරස්ථ සියලුම ශාසනික සේවාවන් සහ පින්කම් තොරතුරු මෙතැනින් ලබාගන්න.</span>
+                    <span class="lang-en">Find details about all religious events, services, and temple activities here.</span>
+                </p>
+            </div>
         </div>
     </div>
 
-    <!-- Navigation Header -->
+    <!-- Navigation Header (matches Stupa page style) -->
     <nav class="bg-amber-900 text-amber-100 sticky top-0 z-50 shadow-md">
         <div class="max-w-5xl mx-auto flex justify-between items-center p-4">
-            
             <div class="flex items-center gap-3">
                 <h1 class="font-bold text-lg md:text-xl">
                     <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය</span>
                     <span class="lang-en">Sri Sambodhi Viharaya</span>
                 </h1>
+                <!-- Mini Stupa (from Stupa page) -->
+                <div class="w-10 h-10 flex-shrink-0 hidden sm:block">
+                    <svg viewBox="0 0 100 100" class="w-full h-full overflow-visible">
+                        <rect x="10" y="85" width="80" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" />
+                        <rect x="18" y="79" width="64" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" />
+                        <rect x="26" y="73" width="48" height="6" rx="1.5" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" />
+                        <path d="M 28 73 A 22 22 0 0 1 72 73 Z" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" />
+                        <rect x="43" y="43" width="14" height="8" fill="#f8fafc" stroke="#fbbf24" stroke-width="1.5" />
+                        <polygon points="44,43 56,43 51,15 49,15" fill="#fbbf24" stroke="#b45309" stroke-width="1" />
+                        <circle cx="50" cy="11" r="3.5" fill="#ef4444" stroke="#7f1d1d" stroke-width="1" />
+                    </svg>
+                </div>
             </div>
 
-            <!-- Desktop Nav Links -->
+            <!-- Desktop Nav -->
             <div class="hidden md:flex items-center gap-6">
                 <a href="#events" class="font-medium hover:text-amber-300 transition">
                     <span class="lang-si">විහාරස්ථ පින්කම්</span>
@@ -81,21 +126,28 @@
                     <span class="lang-si">අමතන්න</span>
                     <span class="lang-en">Contact</span>
                 </a>
-                <!-- Language Toggle Switch -->
+                <a href="Stupa_donation.html" class="bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-1.5 rounded-full transition">
+                    <span class="lang-si">චෛත්‍ය අරමුදල</span>
+                    <span class="lang-en">Stupa Fund</span>
+                </a>
                 <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500 transition">
-                    <span class="lang-si">English </span>
+                    <span class="lang-si">English</span>
                     <span class="lang-en">සිංහල</span>
                 </button>
             </div>
 
-            <!-- Mobile Menu Button -->
-            <button onclick="toggleMobileMenu()" class="md:hidden p-1.5" aria-label="Menu">
-                <i id="menuIconOpen" class="fas fa-bars text-xl"></i>
-                <i id="menuIconClose" class="fas fa-times text-xl hidden"></i>
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="md:hidden p-1.5 -mr-1.5" aria-label="Menu">
+                <svg id="menuIconOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg id="menuIconClose" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
         </div>
 
-        <!-- Mobile Nav Links -->
+        <!-- Mobile Nav -->
         <div id="mobileMenu" class="hidden md:hidden border-t border-amber-700 px-4 pb-4 pt-2 space-y-2">
             <a href="#events" onclick="closeMobileMenu()" class="block py-2 font-medium hover:text-amber-300">
                 <span class="lang-si">විහාරස්ථ පින්කම්</span>
@@ -109,43 +161,69 @@
                 <span class="lang-si">අමතන්න</span>
                 <span class="lang-en">Contact</span>
             </a>
-            <button onclick="toggleLanguage()" class="w-full bg-amber-700 hover:bg-amber-600 px-3 py-2 rounded-lg text-sm font-semibold border border-amber-500 transition mt-2">
-                <span class="lang-si">English Version</span>
-                <span class="lang-en">සිංහල පිටුව</span>
+            <a href="Stupa_donation.html" onclick="closeMobileMenu()" class="block text-center bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-2 rounded-lg">
+                <span class="lang-si">චෛත්‍ය අරමුදල</span>
+                <span class="lang-en">Stupa Fund</span>
+            </a>
+            <button onclick="toggleLanguage()" class="w-full bg-amber-700 hover:bg-amber-600 px-3 py-2 rounded-lg text-sm font-semibold border border-amber-500 transition">
+                <span class="lang-si">English</span>
+                <span class="lang-en">සිංහල</span>
             </button>
         </div>
     </nav>
 
-    <!-- Main Hero Banner -->
+    <!-- Hero Banner with Video Background (like Stupa page) -->
     <header class="relative bg-amber-950 text-white py-16 md:py-24 px-4 text-center overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-amber-950/80 via-amber-950/90 to-amber-950 z-0"></div>
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none">
+            <source src="https://sandeep-anu.github.io/Sambodhi-Asapuwa/images/Untitled%20design%20(1).mp4" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-amber-950/75 z-0"></div>
         <div class="relative z-10 max-w-4xl mx-auto">
             <h2 class="text-3xl md:text-5xl font-extrabold mb-4 text-amber-200">
                 <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථානය</span>
                 <span class="lang-en">Welcome to Sri Sambodhi Viharaya</span>
             </h2>
-           <div class="flex items-center gap-2 font-semibold text-sm sm:text-base">
-                <span class="text-xl">🛕</span>
-                <span class="lang-si">අභිනව චෛත්‍ය රාජයාණන් වහන්සේගේ ඉදිකිරීම් සඳහා දායක වන්න</span>
-                <span class="lang-en">Support the construction of our new Sacred Stupa</span>
-            </div>
-            <a href="https://sandeep-anu.github.io/Sambodhi-Asapuwa/Stupa_donation.html" target="_blank" class="inline-flex items-center gap-2 bg-amber-950 hover:bg-amber-900 text-amber-100 font-bold px-4 py-1.5 rounded-full text-xs sm:text-sm transition shadow">
-                <span class="lang-si">චෛත්‍ය අරමුදලට පිවිසෙන්න</span>
-                <span class="lang-en">Visit Stupa Project</span>
-                <i class="fas fa-arrow-right text-xs"></i>
-            </a>
+            <p class="text-base md:text-lg text-amber-100 mb-6 max-w-2xl mx-auto">
+                <span class="lang-si">අතිපූජනීය මහා සංඝරත්නයේ අනුශාසනා පරිදි සිදුකෙරෙන මෙම පූජනීය මහ සෑ රාජයාණන් වහන්සේ ඉදිකිරීමේ පින්කම උදෙසා ඔබත් මුදලින් හෝ ද්‍රව්‍යයෙන් දායකවන්න.</span>
+                <span class="lang-en">Join hands with us to build a sacred stupa under the guidance of our venerable Mahasangha.</span>
+            </p>
+            <a href="Stupa_donation.html" class="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-6 py-3 rounded-full transition shadow-lg">
+                <span class="lang-si">චෛත්‍ය අරමුදලට පිවිසෙන්න</span>
+                <span class="lang-en">Visit Stupa Project</span>
+                <i class="fas fa-arrow-right text-sm"></i>
+            </a>
         </div>
     </header>
 
-    <!-- Events Section -->
+    <!-- Slideshow Section (using photos from Stupa donation page gallery) -->
+    <section class="max-w-5xl mx-auto py-12 px-4">
+        <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
+            <span class="lang-si">විහාර ඡායාරූප එකතුව</span>
+            <span class="lang-en">Temple Gallery</span>
+        </h3>
+        <div id="slideshowContainer" class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-200 bg-white h-96 md:h-[500px]">
+            <div id="slideTrack" class="flex transition-transform duration-700 ease-in-out h-full">
+                <!-- Slides will be injected by JS -->
+            </div>
+            <!-- Navigation arrows -->
+            <button id="prevSlide" class="absolute left-2 top-1/2 -translate-y-1/2 bg-amber-900/70 hover:bg-amber-800 text-white p-3 rounded-full shadow-lg transition z-10">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="nextSlide" class="absolute right-2 top-1/2 -translate-y-1/2 bg-amber-900/70 hover:bg-amber-800 text-white p-3 rounded-full shadow-lg transition z-10">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <!-- Dots -->
+            <div id="dotsContainer" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
+        </div>
+    </section>
+
+    <!-- Events Section (unchanged but refined) -->
     <section id="events" class="max-w-5xl mx-auto py-12 px-4 scroll-mt-20">
         <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
             <span class="lang-si">ඉදිරි පින්කම් සහ වැඩසටහන්</span>
             <span class="lang-en">Upcoming Religious Events</span>
         </h3>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Event Card 1 -->
             <div class="bg-white rounded-2xl shadow-md border border-amber-200 p-6 flex flex-col justify-between">
                 <div>
                     <span class="bg-amber-100 text-amber-900 text-xs font-semibold px-3 py-1 rounded-full">
@@ -162,8 +240,6 @@
                     </p>
                 </div>
             </div>
-
-            <!-- Event Card 2 -->
             <div class="bg-white rounded-2xl shadow-md border border-amber-200 p-6 flex flex-col justify-between">
                 <div>
                     <span class="bg-amber-100 text-amber-900 text-xs font-semibold px-3 py-1 rounded-full">
@@ -183,62 +259,78 @@
         </div>
     </section>
 
-    <!-- Contact & Map Section -->
-    <section id="contact" class="bg-amber-100/50 py-12 px-4 scroll-mt-20">
-        <div class="max-w-4xl mx-auto">
-            <h3 class="text-2xl font-bold text-amber-900 text-center mb-8">
-                <span class="lang-si">සම්බන්ධ කර ගැනීමට</span>
-                <span class="lang-en">Connect With Us</span>
+    <!-- About Section -->
+    <section id="about" class="bg-amber-100/50 py-12 px-4 scroll-mt-20">
+        <div class="max-w-3xl mx-auto text-center">
+            <h3 class="text-2xl font-bold text-amber-900 mb-4">
+                <span class="lang-si">විහාරය පිළිබඳව</span>
+                <span class="lang-en">About Us</span>
             </h3>
+            <p class="text-slate-700 leading-relaxed">
+                <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය රාගම ප්‍රදේශයේ පිහිටි ඓතිහාසික බෞද්ධ සිද්ධස්ථානයකි. මෙහිදී සෑම දිනකම ධර්ම දේශනා, භාවනා වැඩසටහන් සහ ශාසනික සේවාවන් පැවැත්වේ.</span>
+                <span class="lang-en">Sri Sambodhi Viharaya is a historic Buddhist temple in Ragama, offering daily Dhamma talks, meditation programs, and religious services.</span>
+            </p>
+        </div>
+    </section>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Phone Card -->
-                <a href="tel:+94112920240" class="social-card p-4 rounded-xl flex items-center gap-4">
-                    <div class="social-icon phone-icon flex-shrink-0"><i class="fas fa-phone-alt"></i></div>
-                    <div>
-                        <p class="font-bold text-slate-800">
-                            <span class="lang-si">දුරකථන අමතුම</span>
-                            <span class="lang-en">Call Us</span>
-                        </p>
-                        <p class="text-xs text-slate-500">+94 11 292 0240</p>
+    <!-- Contact Section (enhanced with social cards matching Stupa page) -->
+    <section id="contact" class="max-w-5xl mx-auto py-12 px-4 scroll-mt-24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Bank / Donation Info -->
+            <div class="bg-amber-900 text-amber-50 p-6 rounded-2xl shadow-md flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-amber-200 mb-4">
+                        <span class="lang-si">දායකත්වය සඳහා</span>
+                        <span class="lang-en">Donation Details</span>
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <p><strong><span class="lang-si">ගිණුමේ නම:</span><span class="lang-en">Account Name:</span></strong><br> Sri Sambodhi Viharastha Karya Sadaka Samithiya</p>
+                        <p><strong><span class="lang-si">බැංකුව:</span><span class="lang-en">Bank:</span></strong><br> Hatton National Bank (HNB) - Ragama Branch</p>
+                        <p><strong><span class="lang-si">ගිණුම් අංකය:</span><span class="lang-en">Account Number:</span></strong><br> <span class="text-lg font-mono text-amber-300">102020383865</span></p>
+                        <a href="https://forms.gle/X8Z1CbhhhyHLJqQi6" target="_blank" class="block w-full text-center bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-2 mt-4 rounded-full transition">
+                            <span class="lang-si">ගෙවීම් පත්‍රිකාව උඩුගත කරන්න</span>
+                            <span class="lang-en">Upload Payslip</span>
+                        </a>
                     </div>
-                </a>
+                </div>
+            </div>
 
-                <!-- WhatsApp Card -->
-                <a href="https://wa.me/94716100566" target="_blank" class="social-card p-4 rounded-xl flex items-center gap-4">
-                    <div class="social-icon whatsapp-icon flex-shrink-0"><i class="fab fa-whatsapp"></i></div>
-                    <div>
-                        <p class="font-bold text-slate-800">WhatsApp</p>
-                        <p class="text-xs text-slate-500">
-                            <span class="lang-si">පණිවිඩයක් යොමු කරන්න</span>
-                            <span class="lang-en">Send a message</span>
-                        </p>
-                    </div>
-                </a>
-
-                <!-- Facebook Card -->
-                <a href="https://www.facebook.com/" target="_blank" class="social-card p-4 rounded-xl flex items-center gap-4">
-                    <div class="social-icon facebook-icon flex-shrink-0"><i class="fab fa-facebook-f"></i></div>
-                    <div>
-                        <p class="font-bold text-slate-800">Facebook</p>
-                        <p class="text-xs text-slate-500">
-                            <span class="lang-si">ෆේස්බුක් පිටුව</span>
-                            <span class="lang-en">Official Page</span>
-                        </p>
-                    </div>
-                </a>
-
-                <!-- Google Maps Card -->
-                <a href="https://maps.app.goo.gl/JUa7TGkPvVnPHmW2A" target="_blank" class="social-card p-4 rounded-xl flex items-center gap-4">
-                    <div class="social-icon maps-icon flex-shrink-0"><i class="fas fa-map-marker-alt"></i></div>
-                    <div>
-                        <p class="font-bold text-slate-800">Location</p>
-                        <p class="text-xs text-slate-500">
-                            <span class="lang-si">ගූගල් සිතියම</span>
-                            <span class="lang-en">View on Google Maps</span>
-                        </p>
-                    </div>
-                </a>
+            <!-- Social Connect Cards -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-200">
+                <h3 class="text-xl font-bold text-amber-900 mb-4">
+                    <span class="lang-si">අප හා සම්බන්ධ වන්න</span>
+                    <span class="lang-en">Connect With Us</span>
+                </h3>
+                <div class="grid grid-cols-1 gap-4">
+                    <a href="https://wa.me/94716100566" target="_blank" class="social-card block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-icon whatsapp-icon"><i class="fab fa-whatsapp"></i></div>
+                            <div><p class="font-bold text-slate-800">WhatsApp</p><p class="text-xs text-slate-500"><span class="lang-si">පණිවිඩ යොමු කරන්න</span><span class="lang-en">Send a Message</span></p></div>
+                            <div class="ml-auto text-amber-400"><i class="fas fa-arrow-right text-sm"></i></div>
+                        </div>
+                    </a>
+                    <a href="https://www.facebook.com/" target="_blank" class="social-card block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-icon facebook-icon"><i class="fab fa-facebook-f"></i></div>
+                            <div><p class="font-bold text-slate-800">Facebook</p><p class="text-xs text-slate-500"><span class="lang-si">අපගේ පිටුව</span><span class="lang-en">Our Page</span></p></div>
+                            <div class="ml-auto text-amber-400"><i class="fas fa-arrow-right text-sm"></i></div>
+                        </div>
+                    </a>
+                    <a href="tel:+94112920240" class="social-card block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-icon phone-icon"><i class="fas fa-phone-alt"></i></div>
+                            <div><p class="font-bold text-slate-800"><span class="lang-si">දුරකථන අමතුම</span><span class="lang-en">Call Us</span></p><p class="text-xs text-slate-500">+94 11 292 0240</p></div>
+                            <div class="ml-auto text-amber-400"><i class="fas fa-arrow-right text-sm"></i></div>
+                        </div>
+                    </a>
+                    <a href="https://maps.app.goo.gl/JUa7TGkPvVnPHmW2A" target="_blank" class="social-card block p-4 rounded-xl border border-amber-100 shadow-sm hover:shadow-lg transition">
+                        <div class="flex items-center gap-4">
+                            <div class="social-icon maps-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div><p class="font-bold text-slate-800">Google Maps</p><p class="text-xs text-slate-500"><span class="lang-si">සිතියම බලන්න</span><span class="lang-en">View Map</span></p></div>
+                            <div class="ml-auto text-amber-400"><i class="fas fa-arrow-right text-sm"></i></div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -249,28 +341,21 @@
             <span class="lang-si">ශ්‍රී සම්බෝධි විහාරස්ථ දායක සභාව - 2026</span>
             <span class="lang-en">Donors Association of Sri Sambodhi Vihara - 2026</span>
         </p>
+        <p>Built by <i><a href="https://lk.linkedin.com/in/anuranga-hettiarachchi-882aa2247" class="text-amber-300 hover:text-amber-200">Sandeep🧑🏼‍🔬</a></i></p>
     </footer>
 
-    <!-- Scripts -->
     <script>
-        // Language Toggle Mechanism
+        // ---- Language Toggle ----
         let currentLang = 'si';
         function toggleLanguage() {
-            const siElements = document.querySelectorAll('.lang-si');
-            const enElements = document.querySelectorAll('.lang-en');
-
-            if (currentLang === 'si') {
-                siElements.forEach(el => el.style.display = 'none');
-                enElements.forEach(el => el.style.display = 'inline-block');
-                currentLang = 'en';
-            } else {
-                enElements.forEach(el => el.style.display = 'none');
-                siElements.forEach(el => el.style.display = 'inline-block');
-                currentLang = 'si';
-            }
+            document.querySelectorAll('.lang-si').forEach(el => el.style.display = (currentLang === 'si' ? 'none' : 'inline-block'));
+            document.querySelectorAll('.lang-en').forEach(el => el.style.display = (currentLang === 'en' ? 'none' : 'inline-block'));
+            currentLang = (currentLang === 'si' ? 'en' : 'si');
         }
+        // Ensure initial state
+        document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'none');
 
-        // Mobile Menu Controls
+        // ---- Mobile Menu ----
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('hidden');
             document.getElementById('menuIconOpen').classList.toggle('hidden');
@@ -281,6 +366,121 @@
             document.getElementById('menuIconOpen').classList.remove('hidden');
             document.getElementById('menuIconClose').classList.add('hidden');
         }
+
+        // ---- Jasmine Flowers (same as Stupa page, starts after 10s) ----
+        setTimeout(() => {
+            const container = document.getElementById('jasmineContainer');
+            container.classList.remove('opacity-0');
+            const flowerSvg = `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow"><g transform="translate(50,50)"><circle cx="0" cy="0" r="10" fill="#facc15"/><ellipse cx="0" cy="-26" rx="9" ry="18" fill="#fff" stroke="#fde047" stroke-width="0.8"/><ellipse cx="25" cy="-8" rx="9" ry="18" fill="#fff" stroke="#fde047" stroke-width="0.8" transform="rotate(72)"/><ellipse cx="15" cy="22" rx="9" ry="18" fill="#fff" stroke="#fde047" stroke-width="0.8" transform="rotate(144)"/><ellipse cx="-15" cy="22" rx="9" ry="18" fill="#fff" stroke="#fde047" stroke-width="0.8" transform="rotate(216)"/><ellipse cx="-25" cy="-8" rx="9" ry="18" fill="#fff" stroke="#fde047" stroke-width="0.8" transform="rotate(288)"/></g></svg>`;
+            for (let i = 0; i < 30; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'jasmine-flower';
+                flower.style.left = Math.random() * 95 + 'vw';
+                const size = Math.random() * 12 + 14;
+                flower.style.width = size + 'px';
+                flower.style.height = size + 'px';
+                flower.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
+                flower.style.animationDelay = (Math.random() * 1) + 's';
+                flower.innerHTML = flowerSvg;
+                container.appendChild(flower);
+            }
+            setTimeout(() => { container.style.opacity = '0'; setTimeout(() => container.remove(), 1000); }, 3000);
+        }, 10000);
+
+        // ---- Slideshow (using photos from Stupa donation page gallery) ----
+        // Hardcoded image URLs from the gallery in Stupa_donation.html (Google Sheets fallback)
+        const fallbackImages = [
+            'https://placehold.co/800x500/fef3c7/78350f?text=Temple+View+1',
+            'https://placehold.co/800x500/fef3c7/78350f?text=Temple+View+2',
+            'https://placehold.co/800x500/fef3c7/78350f?text=Temple+View+3',
+            'https://placehold.co/800x500/fef3c7/78350f?text=Temple+View+4',
+            'https://placehold.co/800x500/fef3c7/78350f?text=Temple+View+5'
+        ];
+
+        // Try to fetch real images from the same Google Sheet used in Stupa page
+        const SHEET_ID = '15qADyrgkH9hIZFn5gyzbxz0fgyKz9v_hzo70FuZS9Ss';
+        let slideImages = [];
+
+        async function fetchGalleryImages() {
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=Gallery`;
+                const res = await fetch(url);
+                const text = await res.text();
+                const jsonStart = text.indexOf('{');
+                const jsonEnd = text.lastIndexOf('}');
+                if (jsonStart === -1 || jsonEnd === -1) throw new Error('Invalid JSON');
+                const json = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
+                if (!json.table || !json.table.rows) throw new Error('No rows');
+
+                const cols = json.table.cols.map(c => (c.label || '').trim());
+                const rows = json.table.rows.map(r => {
+                    let obj = {};
+                    r.c.forEach((cell, idx) => {
+                        if (cell) obj[cols[idx]] = cell.f || cell.v || '';
+                    });
+                    return obj;
+                });
+
+                const images = rows.map(row => {
+                    const urlKey = Object.keys(row).find(k => /image|url|photo/i.test(k));
+                    return urlKey ? row[urlKey] : null;
+                }).filter(Boolean);
+
+                if (images.length > 0) slideImages = images;
+                else slideImages = fallbackImages;
+                initSlideshow();
+            } catch (e) {
+                console.warn('Using fallback images for slideshow', e);
+                slideImages = fallbackImages;
+                initSlideshow();
+            }
+        }
+
+        function initSlideshow() {
+            const track = document.getElementById('slideTrack');
+            const dots = document.getElementById('dotsContainer');
+            let current = 0;
+
+            track.innerHTML = '';
+            dots.innerHTML = '';
+            slideImages.forEach((url, idx) => {
+                const slide = document.createElement('div');
+                slide.className = 'min-w-full h-full flex items-center justify-center bg-amber-50';
+                slide.innerHTML = `<img src="${url}" alt="Slide ${idx+1}" class="w-full h-full object-contain">`;
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = `w-3 h-3 rounded-full transition ${idx === 0 ? 'bg-amber-600' : 'bg-amber-300'}`;
+                dot.dataset.index = idx;
+                dot.addEventListener('click', () => goTo(idx));
+                dots.appendChild(dot);
+            });
+
+            function goTo(index) {
+                current = (index + slideImages.length) % slideImages.length;
+                track.style.transform = `translateX(-${current * 100}%)`;
+                document.querySelectorAll('#dotsContainer button').forEach((d, i) => {
+                    d.className = `w-3 h-3 rounded-full transition ${i === current ? 'bg-amber-600' : 'bg-amber-300'}`;
+                });
+            }
+
+            document.getElementById('prevSlide').addEventListener('click', () => goTo(current - 1));
+            document.getElementById('nextSlide').addEventListener('click', () => goTo(current + 1));
+
+            // Auto-play
+            let interval = setInterval(() => goTo(current + 1), 4000);
+            const container = document.getElementById('slideshowContainer');
+            container.addEventListener('mouseenter', () => clearInterval(interval));
+            container.addEventListener('mouseleave', () => {
+                clearInterval(interval);
+                interval = setInterval(() => goTo(current + 1), 4000);
+            });
+
+            // Ensure first slide
+            goTo(0);
+        }
+
+        fetchGalleryImages();
     </script>
 </body>
 </html>
