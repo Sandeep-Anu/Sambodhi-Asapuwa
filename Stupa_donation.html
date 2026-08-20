@@ -454,7 +454,7 @@
                                 </p>
                                 <p class="text-xs text-slate-500">
                                     <span class="lang-si">Google සිතියම </span>
-                                    <span class="lang-en">View Location on Map</span>
+                                    <span class="lang-en">Visit us</span>
                                 </p>
                             </div>
                             <div class="text-amber-400 group-hover:text-amber-600 transition">
@@ -666,116 +666,117 @@
         }
 
         async function loadWebsiteData() {
-            try {
-                const progressData = await fetchGoogleSheet('Progress');
-                if (progressData && progressData.length > 0) {
-                    const row = progressData[0];
-                    const goal = parseFloat(String(pickField(row, ['Goal', 'Target', 'Total Goal'])).replace(/[^0-9.-]+/g, '')) || 0;
-                    const raised = parseFloat(String(pickField(row, ['Raised', 'Collected', 'Raised So Far'])).replace(/[^0-9.-]+/g, '')) || 0;
-                    const percentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
+    // 1. Progress Bar Fetch
+    try {
+        const progressData = await fetchGoogleSheet('Progress');
+        if (progressData && progressData.length > 0) {
+            const row = progressData[0];
+            const goal = parseFloat(String(pickField(row, ['Goal', 'Target', 'Total Goal'])).replace(/[^0-9.-]+/g, '')) || 0;
+            const raised = parseFloat(String(pickField(row, ['Raised', 'Collected', 'Raised So Far'])).replace(/[^0-9.-]+/g, '')) || 0;
+            const percentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
 
-                    const bar = document.getElementById('progressBar');
-                    bar.style.width = `${percentage}%`;
-                    bar.textContent = `${percentage}%`;
+            const bar = document.getElementById('progressBar');
+            bar.style.width = `${percentage}%`;
+            bar.textContent = `${percentage}%`;
 
-                    const raisedFormatted = pickField(row, ['Raised_Formatted', 'Raised Formatted']);
-                    const targetFormatted = pickField(row, ['Target_Formatted', 'Goal_Formatted', 'Target Formatted']);
-                    document.getElementById('raisedText').textContent = raisedFormatted || `LKR ${raised.toLocaleString()}`;
-                    document.getElementById('goalText').textContent = targetFormatted || `LKR ${goal.toLocaleString()}`;
+            const raisedFormatted = pickField(row, ['Raised_Formatted', 'Raised Formatted']);
+            const targetFormatted = pickField(row, ['Target_Formatted', 'Goal_Formatted', 'Target Formatted']);
+            document.getElementById('raisedText').textContent = raisedFormatted || `LKR ${raised.toLocaleString()}`;
+            document.getElementById('goalText').textContent = targetFormatted || `LKR ${goal.toLocaleString()}`;
+        } else {
+            console.warn('Progress tab returned no rows.');
+        }
+    } catch (err) {
+        console.error('Error loading progress:', err);
+        const errEl = document.getElementById('progressError');
+        errEl.textContent = currentLang === 'si'
+            ? 'ප්‍රගති දත්ත පූරණය කිරීමේ දෝෂයක් - Console එක පරීක්ෂා කරන්න.'
+            : `Couldn't load progress data (${err.message})`;
+        errEl.classList.remove('hidden');
+    }
+
+    // 2. Videos Fetch
+    try {
+        const videoData = await fetchGoogleSheet('Videos');
+        const container = document.getElementById('videoContainer');
+        container.innerHTML = '';
+        if (!videoData || videoData.length === 0) {
+            container.innerHTML = '<p class="text-center text-slate-500 col-span-2">No videos added yet.</p>';
+        } else {
+            let addedCount = 0;
+            videoData.forEach(item => {
+                const rawUrl = pickField(item, ['URL', 'Link', 'YouTube', 'YouTube Link', 'Video URL', 'Video Link']);
+                const title = pickField(item, ['Title', 'Name']);
+                const embedUrl = getYouTubeEmbedUrl(rawUrl);
+                if (embedUrl) {
+                    addedCount++;
+                    const card = document.createElement('div');
+                    card.className = 'bg-white p-4 rounded-xl shadow-md border border-amber-100';
+                    card.innerHTML = `
+                        <div class="aspect-video bg-slate-200 rounded-lg overflow-hidden mb-3">
+                            <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <p class="font-semibold text-amber-900 text-sm">${title || ''}</p>
+                    `;
+                    container.appendChild(card);
                 } else {
-                    console.warn('Progress tab returned no rows.');
+                    console.warn('Skipped a video row - no recognizable YouTube URL. Raw row from sheet:', item);
                 }
-            } catch (err) {
-                console.error('Error loading progress:', err);
-                const errEl = document.getElementById('progressError');
-                errEl.textContent = currentLang === 'si'
-                    ? 'ප්‍රගති දත්ත පූරණය කිරීමේ දෝෂයක් - Console එක පරීක්ෂා කරන්න.'
-                    : `Couldn't load progress data (${err.message})`;
-                errEl.classList.remove('hidden');
-            }
-
-            try {
-                const videoData = await fetchGoogleSheet('Videos');
-                const container = document.getElementById('videoContainer');
-                container.innerHTML = '';
-                if (!videoData || videoData.length === 0) {
-                    container.innerHTML = '<p class="text-center text-slate-500 col-span-2">No videos added yet.</p>';
-                } else {
-                    let addedCount = 0;
-                    videoData.forEach(item => {
-                        const rawUrl = pickField(item, ['URL', 'Link', 'YouTube', 'YouTube Link', 'Video URL', 'Video Link']);
-                        const title = pickField(item, ['Title', 'Name']);
-                        const embedUrl = getYouTubeEmbedUrl(rawUrl);
-                        if (embedUrl) {
-                            addedCount++;
-                            const card = document.createElement('div');
-                            card.className = 'bg-white p-4 rounded-xl shadow-md border border-amber-100';
-                            card.innerHTML = `
-                                <div class="aspect-video bg-slate-200 rounded-lg overflow-hidden mb-3">
-                                    <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-                                </div>
-                                <p class="font-semibold text-amber-900 text-sm">${title || ''}</p>
-                            `;
-                            container.appendChild(card);
-                        } else {
-                            console.warn('Skipped a video row - no recognizable YouTube URL. Raw row from sheet:', item);
-                        }
-                    });
-                    if (addedCount === 0) {
-                        container.innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">${videoData.length} row(s) found in "Videos" tab, but none had a usable YouTube link. Open the browser console for details on each row's actual column names.</p>`;
-                    }
-                }
-            } catch (err) {
-                console.error('Error loading videos:', err);
-                document.getElementById('videoContainer').innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">Couldn't load videos (${err.message})</p>`;
-            }
-
-            try {
-                const galleryData = await fetchGoogleSheet('Gallery');
-                const container = document.getElementById('galleryContainer');
-                const viewMoreContainer = document.getElementById('viewMoreContainer');
-                container.innerHTML = '';
-                if (!galleryData || galleryData.length === 0) {
-                    container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>';
-                } else {
-                    let addedCount = 0;
-                    galleryData.forEach(item => {
-                        const imageUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
-                        const caption = pickField(item, ['Caption', 'Description', 'Title']);
-                        if (imageUrl) {
-                            addedCount++;
-                            const card = document.createElement('div');
-                            const hideClass = addedCount > 3 ? 'hidden gallery-extra' : '';
-                            const safeCaption = (caption || '').replace(/'/g, "\\'");
-                            card.className = `bg-white rounded-xl shadow-md overflow-hidden border border-amber-100 cursor-pointer hover:shadow-xl hover:scale-[1.02] transition duration-300 ${hideClass}`;
-                            card.onclick = () => openModal(imageUrl, caption);
-                            card.innerHTML = `
-                                <img src="${imageUrl}" alt="${caption || 'Gallery Photo'}" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
-                                ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
-                            `;
-                            container.appendChild(card);
-                        } else {
-                            console.warn('Skipped a gallery row - no image URL found. Raw row from sheet:', item);
-                        }
-                    });
-
-                    if (addedCount > 3) {
-                        viewMoreContainer.classList.remove('hidden');
-                    } else {
-                        viewMoreContainer.classList.add('hidden');
-                    }
-
-                    if (addedCount === 0) {
-                        container.innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">${galleryData.length} row(s) found in "Gallery" tab, but none had a usable image link. Open the browser console for details on each row's actual column names.</p>`;
-                    }
-                }
-            } catch (err) {
-                console.error('Error loading gallery:', err);
-                document.getElementById('galleryContainer').innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">Couldn't load photos (${err.message})</p>`;
+            });
+            if (addedCount === 0) {
+                container.innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">${videoData.length} row(s) found in "Videos" tab, but none had a usable YouTube link.</p>`;
             }
         }
+    } catch (err) {
+        console.error('Error loading videos:', err);
+        document.getElementById('videoContainer').innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">Couldn't load videos (${err.message})</p>`;
+    }
 
-        loadWebsiteData();
+    // 3. Stupa Gallery Fetch (Filtered)
+    try {
+        const galleryData = await fetchGoogleSheet('Gallery');
+        const container = document.getElementById('galleryContainer');
+        const viewMoreContainer = document.getElementById('viewMoreContainer');
+        container.innerHTML = '';
+        if (!galleryData || galleryData.length === 0) {
+            container.innerHTML = '<p class="text-center text-slate-500 col-span-3">No photos added yet.</p>';
+        } else {
+            let addedCount = 0;
+            galleryData.forEach(item => {
+                const imageUrl = pickField(item, ['Image_URL', 'Image URL', 'Image', 'Photo', 'Photo URL', 'Picture']);
+                const caption = pickField(item, ['Caption', 'Description', 'Title']);
+                const category = pickField(item, ['Category', 'Type', 'Page', 'Tag']).toLowerCase().trim();
+
+                if (imageUrl && category === 'stupa') {
+                    addedCount++;
+                    const card = document.createElement('div');
+                    const hideClass = addedCount > 3 ? 'hidden gallery-extra' : '';
+                    card.className = `bg-white rounded-xl shadow-md overflow-hidden border border-amber-100 cursor-pointer hover:shadow-xl hover:scale-[1.02] transition duration-300 ${hideClass}`;
+                    card.onclick = () => openModal(imageUrl, caption);
+                    card.innerHTML = `
+                        <img src="${imageUrl}" alt="${caption || 'Gallery Photo'}" class="w-full h-44 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Found';">
+                        ${caption ? `<p class="p-2 text-xs text-slate-600 text-center">${caption}</p>` : ''}
+                    `;
+                    container.appendChild(card);
+                }
+            });
+
+            if (addedCount > 3) {
+                viewMoreContainer.classList.remove('hidden');
+            } else {
+                viewMoreContainer.classList.add('hidden');
+            }
+
+            if (addedCount === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500 col-span-3 text-sm">No stupa photos found in the Google Sheet.</p>`;
+            }
+        }
+    } catch (err) {
+        console.error('Error loading gallery:', err);
+        document.getElementById('galleryContainer').innerHTML = `<p class="text-center text-red-500 col-span-3 text-sm">Couldn't load photos (${err.message})</p>`;
+    }
+}
+    loadWebsiteData();
     </script>
 </body>
 </html>
