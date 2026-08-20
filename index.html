@@ -92,78 +92,43 @@
     -->
 
     <!-- Navigation Header -->
-    <nav class="bg-amber-900 text-amber-100 sticky top-0 z-50 shadow-md">
-        <div class="max-w-5xl mx-auto flex justify-between items-center p-4">
-            <div class="flex items-center gap-3">
-                <h1 class="font-bold text-lg md:text-xl">
-                    <span class="lang-si">ශ්‍රී සම්බෝධි විහාරය</span>
-                    <span class="lang-en">Sri Sambodhi Viharaya</span>
-                </h1>
-           
-<img src="https://i.pinimg.com/originals/fb/9a/9d/fb9a9d61d9febde33fef80d54696e5c8.gif"
-     alt="Animated Bodhi Tree"
-     class="w-12 h-12 rounded-full object-cover"
-     loading="lazy" /> 
-                <!-- Desktop Nav -->
-            <div class="hidden md:flex items-center gap-6">
-                <a href="#events" class="font-medium hover:text-amber-300 transition">
-                    <span class="lang-si">විහාරස්ථ පින්කම්</span>
-                    <span class="lang-en">Upcoming Events</span>
-                </a>
-                <a href="#about" class="font-medium hover:text-amber-300 transition">
-                    <span class="lang-si">විහාරය පිළිබඳව</span>
-                    <span class="lang-en">About Us</span>
-                </a>
-                <a href="#contact" class="font-medium hover:text-amber-300 transition">
-                    <span class="lang-si">අමතන්න</span>
-                    <span class="lang-en">Contact</span>
-                </a>
-                <a href="Stupa_donation.html" class="bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-1.5 rounded-full transition">
-                    <span class="lang-si">චෛත්‍ය අරමුදල</span>
-                    <span class="lang-en">Stupa Fund</span>
-                </a>
-                <button onclick="toggleLanguage()" class="bg-amber-700 hover:bg-amber-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-amber-500 transition">
-                    <span class="lang-si">English</span>
-                    <span class="lang-en">සිංහල</span>
-                </button>
-            </div>
+    <header class="bg-[#6e2c0e] text-white relative z-50">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    
+    <!-- Brand Logo + Title (Left Aligned) -->
+    <a href="#" class="flex items-center gap-3">
+      <img src="https://i.pinimg.com/originals/fb/9a/9d/fb9a9d61d9febde33fef80d54696e5c8.gif" alt="Logo" class="w-12 h-12 rounded-full object-cover" loading="lazy" />
+      <span class="text-xl font-bold tracking-wide text-amber-50">ශ්‍රී සම්බෝධි විහාරය</span>
+    </a>
 
-            <!-- Mobile Menu Toggle -->
-            <button onclick="toggleMobileMenu()" class="md:hidden p-1.5 -mr-1.5" aria-label="Menu">
-                <svg id="menuIconOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                <svg id="menuIconClose" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Mobile Nav -->
-        <div id="mobileMenu" class="hidden md:hidden border-t border-amber-700 px-4 pb-4 pt-2 space-y-2">
-            <a href="#events" onclick="closeMobileMenu()" class="block py-2 font-medium hover:text-amber-300">
-                <span class="lang-si">විහාරස්ථ පින්කම්</span>
-                <span class="lang-en">Upcoming Events</span>
-            </a>
-            <a href="#about" onclick="closeMobileMenu()" class="block py-2 font-medium hover:text-amber-300">
-                <span class="lang-si">විහාරය පිළිබඳව</span>
-                <span class="lang-en">About Us</span>
-            </a>
-            <a href="#contact" onclick="closeMobileMenu()" class="block py-2 font-medium hover:text-amber-300">
-                <span class="lang-si">අමතන්න</span>
-                <span class="lang-en">Contact</span>
-            </a>
-            <a href="Stupa_donation.html" onclick="closeMobileMenu()" class="block text-center bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-4 py-2 rounded-lg">
-                <span class="lang-si">චෛත්‍ය අරමුදල</span>
-                <span class="lang-en">Stupa Fund</span>
-            </a>
-            <button onclick="toggleLanguage()" class="w-full bg-amber-700 hover:bg-amber-600 px-3 py-2 rounded-lg text-sm font-semibold border border-amber-500 transition">
-                <span class="lang-si">English</span>
-                <span class="lang-en">සිංහල</span>
-            </button>
-        </div>
+    <!-- Desktop Navigation Links (Hidden on Mobile) -->
+    <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+      <a href="#events" class="hover:text-amber-200 transition">විහාරස්ථ පින්කම්</a>
+      <a href="#about" class="hover:text-amber-200 transition">විහාරය පිළිබඳව</a>
+      <a href="#contact" class="hover:text-amber-200 transition">අමතන්න</a>
+      <a href="#fund" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold px-4 py-2 rounded-lg transition">චෛත්‍ය අරමුදල</a>
+      <button id="langToggle" class="border border-amber-200/40 px-3 py-1.5 rounded-lg hover:bg-amber-900/40 transition">English</button>
     </nav>
 
+    <!-- Mobile Menu Toggle Button (Right Aligned) -->
+    <button id="menuToggleBtn" class="md:hidden text-2xl focus:outline-none p-1 text-amber-100" onclick="toggleMobileMenu()">
+      <span id="hamburgerIcon">☰</span>
+      <span id="closeIcon" class="hidden">✕</span>
+    </button>
+  </div>
+
+  <!-- Mobile Dropdown Menu (Positioned Overlay) -->
+  <div id="mobileMenu" class="hidden absolute top-full left-0 w-full bg-[#5c240b] border-t border-amber-900/50 shadow-2xl md:hidden">
+    <div class="flex flex-col p-5 gap-4">
+      <a href="#events" class="text-amber-50 hover:text-amber-200 text-base">විහාරස්ථ පින්කම්</a>
+      <a href="#about" class="text-amber-50 hover:text-amber-200 text-base">විහාරය පිළිබඳව</a>
+      <a href="#contact" class="text-amber-50 hover:text-amber-200 text-base">අමතන්න</a>
+      <hr class="border-amber-900/60 my-1">
+      <a href="#fund" class="bg-amber-500 text-slate-900 text-center font-bold py-2.5 rounded-lg shadow-md">චෛත්‍ය අරමුදල</a>
+      <button class="border border-amber-200/40 text-amber-100 py-2 rounded-lg hover:bg-amber-900/50 transition">English</button>
+    </div>
+  </div>
+</header>
     <!-- Hero Banner with Video Background -->
     <header class="relative bg-amber-950 text-white py-16 md:py-24 px-4 text-center overflow-hidden">
         <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none">
@@ -350,10 +315,22 @@
 
         // ---- Mobile Menu ----
         function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-            document.getElementById('menuIconOpen').classList.toggle('hidden');
-            document.getElementById('menuIconClose').classList.toggle('hidden');
-        }
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.getElementById('hamburgerIcon');
+        const close = document.getElementById('closeIcon');
+
+        const isOpen = !menu.classList.contains('hidden');
+
+    if (isOpen) {
+        menu.classList.add('hidden');
+        hamburger.classList.remove('hidden');
+        close.classList.add('hidden');
+    } else {
+        menu.classList.remove('hidden');
+        hamburger.classList.add('hidden');
+        close.classList.remove('hidden');
+    }
+}
         function closeMobileMenu() {
             document.getElementById('mobileMenu').classList.add('hidden');
             document.getElementById('menuIconOpen').classList.remove('hidden');
