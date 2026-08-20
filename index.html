@@ -395,40 +395,44 @@
         let slideImages = [];
 
         async function fetchGalleryImages() {
-            try {
-                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=Gallery`;
-                const res = await fetch(url);
-                const text = await res.text();
-                const jsonStart = text.indexOf('{');
-                const jsonEnd = text.lastIndexOf('}');
-                if (jsonStart === -1 || jsonEnd === -1) throw new Error('Invalid JSON');
-                const json = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
-                if (!json.table || !json.table.rows) throw new Error('No rows');
+    try {
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=Gallery`;
+        const res = await fetch(url);
+        const text = await res.text();
+        const jsonStart = text.indexOf('{');
+        const jsonEnd = text.lastIndexOf('}');
+        if (jsonStart === -1 || jsonEnd === -1) throw new Error('Invalid JSON');
+        const json = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
+        if (!json.table || !json.table.rows) throw new Error('No rows');
 
-                const cols = json.table.cols.map(c => (c.label || '').trim());
-                const rows = json.table.rows.map(r => {
-                    let obj = {};
-                    r.c.forEach((cell, idx) => {
-                        if (cell) obj[cols[idx]] = cell.f || cell.v || '';
-                    });
-                    return obj;
-                });
+        const cols = json.table.cols.map(c => (c.label || '').trim());
+        const rows = json.table.rows.map(r => {
+            let obj = {};
+            r.c.forEach((cell, idx) => {
+                if (cell) obj[cols[idx]] = cell.f || cell.v || '';
+            });
+            return obj;
+        });
 
-                const images = rows.map(row => {
-                    const urlKey = Object.keys(row).find(k => /image|url|photo/i.test(k));
-                    return urlKey ? row[urlKey] : null;
-                }).filter(Boolean);
+        // FILTER: Include only images where Category is NOT 'stupa'
+        const images = rows.filter(row => {
+            const categoryKey = Object.keys(row).find(k => /category|type|page/i.test(k));
+            const categoryValue = categoryKey ? String(row[categoryKey]).toLowerCase().trim() : '';
+            return categoryValue !== 'stupa';
+        }).map(row => {
+            const urlKey = Object.keys(row).find(k => /image|url|photo/i.test(k));
+            return urlKey ? row[urlKey] : null;
+        }).filter(Boolean);
 
-                if (images.length > 0) slideImages = images;
-                else slideImages = fallbackImages;
-                initSlideshow();
-            } catch (e) {
-                console.warn('Using fallback images for slideshow', e);
-                slideImages = fallbackImages;
-                initSlideshow();
-            }
-        }
-
+        if (images.length > 0) slideImages = images;
+        else slideImages = fallbackImages;
+        initSlideshow();
+    } catch (e) {
+        console.warn('Using fallback images for slideshow', e);
+        slideImages = fallbackImages;
+        initSlideshow();
+    }
+}
         function initSlideshow() {
             const track = document.getElementById('slideTrack');
             const dots = document.getElementById('dotsContainer');
