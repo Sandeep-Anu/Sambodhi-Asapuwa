@@ -622,21 +622,37 @@
             });
         }
 
-        function getYouTubeEmbedUrl(url) {
-            if (!url) return '';
-            url = String(url).trim();
-            let videoId = '';
-            if (url.includes('embed/')) {
-                return url;
-            } else if (url.includes('shorts/')) {
-                videoId = url.split('shorts/')[1].split('?')[0].split('&')[0];
-            } else if (url.includes('v=')) {
-                videoId = url.split('v=')[1].split('&')[0];
-            } else if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1].split('?')[0];
-            }
-            return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+        function getVideoEmbedUrl(url) {
+    if (!url) return '';
+    url = String(url).trim();
+    
+    // 1. Handle Vimeo Links
+    if (url.includes('vimeo.com')) {
+        if (url.includes('player.vimeo.com/video/')) {
+            return url; // It is already a valid Vimeo embed URL
         }
+        // Extract the numerical ID from standard Vimeo links (e.g., vimeo.com/123456789)
+        const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+        if (vimeoMatch && vimeoMatch[1]) {
+            return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+        }
+    }
+
+    // 2. Handle YouTube Links
+    let videoId = '';
+    if (url.includes('youtube.com/embed/')) {
+        return url; // It is already a valid YouTube embed URL
+    } else if (url.includes('shorts/')) {
+        videoId = url.split('shorts/')[1].split('?')[0].split('&')[0];
+    } else if (url.includes('v=')) {
+        videoId = url.split('v=')[1].split('&')[0];
+    } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0];
+    }
+    
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+}
+
 
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('hidden');
@@ -696,7 +712,7 @@
         errEl.classList.remove('hidden');
     }
 
-    // 2. Videos Fetch
+     // 2. Videos Fetch
     try {
         const videoData = await fetchGoogleSheet('Videos');
         const container = document.getElementById('videoContainer');
@@ -708,7 +724,10 @@
             videoData.forEach(item => {
                 const rawUrl = pickField(item, ['URL', 'Link', 'YouTube', 'YouTube Link', 'Video URL', 'Video Link']);
                 const title = pickField(item, ['Title', 'Name']);
-                const embedUrl = getYouTubeEmbedUrl(rawUrl);
+                
+                // Use the new generic video function here
+                const embedUrl = getVideoEmbedUrl(rawUrl); 
+                
                 if (embedUrl) {
                     addedCount++;
                     const card = document.createElement('div');
@@ -721,11 +740,11 @@
                     `;
                     container.appendChild(card);
                 } else {
-                    console.warn('Skipped a video row - no recognizable YouTube URL. Raw row from sheet:', item);
+                    console.warn('Skipped a video row - no recognizable YouTube or Vimeo URL. Raw row from sheet:', item);
                 }
             });
             if (addedCount === 0) {
-                container.innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">${videoData.length} row(s) found in "Videos" tab, but none had a usable YouTube link.</p>`;
+                container.innerHTML = `<p class="text-center text-red-500 col-span-2 text-sm">${videoData.length} row(s) found in "Videos" tab, but none had a usable YouTube or Vimeo link.</p>`;
             }
         }
     } catch (err) {
